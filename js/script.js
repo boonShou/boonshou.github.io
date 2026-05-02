@@ -39,7 +39,7 @@
   }
 
   // --- GOOGLE SHEETS FETCH LOGIC ---
-  const SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE'; // Replace with your URL
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyGqAXfGpyi7sOCHL7zoeFAszYsjYvXWvYBxOpUxPzk03Fkmu2FaGCgpvFyNPAdetwz/exec';
 
   async function fetchProjects() {
     const container = document.getElementById('projects-container');
