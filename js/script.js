@@ -39,7 +39,7 @@
   }
 
   // --- GOOGLE SHEETS FETCH LOGIC ---
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzN-zKOBzw5I96FiPyeiyk_LzM8EN9SkF6wMZYXLl136aXJ_bvmr5yQkiOn8FFgzMIE/exec';
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzOceVMpHz0U4Uyd3xDyPxLxg_-o2dr54RlLLA1rScyRKUmfy1YWicLS9xrl49RqFk6/exec';
 
   async function fetchProjects() {
     const container = document.getElementById('projects-container');
