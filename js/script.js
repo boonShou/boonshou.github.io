@@ -58,6 +58,8 @@
       container.innerHTML = `<p class="project-placeholder reveal" style="color: red;">Failed to load projects. Please try again later.</p>`;
       console.error('Error fetching projects:', error);
     }
+  }
+
   function renderMediaIcons(mediaString) {
     if (!mediaString) return '';
     const iconMap = {
