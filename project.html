@@ -52,6 +52,9 @@
         if (result.status === 'success' && result.data.length > 0) {
           const proj = result.data[0];
           
+          // Render Tags as Badges
+          const tagsHtml = (proj.tags || '').split(',').map(t => `<span class="project-tag">${t.trim()}</span>`).join(' ');
+
           // Render Gallery
           let galleryHtml = '';
           if (proj.image_url) {
@@ -81,7 +84,7 @@
                 </div>
                 <div class="meta-item">
                   <span class="meta-label">Tags</span>
-                  <span class="meta-value">${proj.tags || 'N/A'}</span>
+                  <div class="meta-value">${tagsHtml || 'N/A'}</div>
                 </div>
               </div>
               <div class="project-media">

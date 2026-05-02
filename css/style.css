@@ -371,7 +371,68 @@ section { min-height: 100vh; padding: 120px 8% 80px; }
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 0.5rem; padding: 3rem;
   border-radius: 12px; text-align: center;
-  grid-column: 1 / -1;
+}
+
+/* --- PROJECT DETAIL PAGE --- */
+.project-detail {
+  padding: 120px 8% 80px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.project-header {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.project-header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 3.5rem;
+  color: var(--white);
+  margin-bottom: 1.5rem;
+  font-weight: 900;
+}
+
+.project-meta {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.meta-label {
+  font-size: 0.75rem;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 600;
+}
+
+.meta-value {
+  color: var(--light);
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.project-content {
+  color: var(--grey);
+  line-height: 1.8;
+  font-size: 1.1rem;
+  background: rgba(17,34,64,0.4);
+  padding: 3rem;
+  border-radius: 15px;
+  border: 1px solid rgba(201,168,76,0.1);
+}
+
+.project-content p {
+  margin-bottom: 1.5rem;
 }
 .project-placeholder i { font-size: 2rem; color: rgba(201,168,76,0.3); }
 .project-placeholder p { color: var(--grey); font-size: 0.9rem; }
