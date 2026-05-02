@@ -109,7 +109,7 @@ imgContent += `<i class="fas fa-laptop-code" style="z-index: 2;"></i>`;
 
 const html = `
 <div class="project-card reveal" style="cursor: pointer;" onclick="window.location.href='project.html?id=${proj.id}'">
-<div class="project-img">
+<div class="project-img" onclick="event.stopPropagation(); openLightbox('${proj.image_url}')">
 <span class="project-num">${(index + 1).toString().padStart(2, '0')}</span>
 ${imgContent}
 </div>
@@ -120,7 +120,7 @@ ${tagsHtml}
 <h3 class="project-title">${proj.title}</h3>
 <p class="project-desc">${proj.short_description}</p>
 <div class="project-media">
-${renderMediaIcons(proj.media)}
+${renderMediaIcons(proj.media || proj[""])}
 </div>
 </div>
 </div>
@@ -134,6 +134,35 @@ observer.observe(el);
 // Give them a small timeout to animate in after being added
 setTimeout(() => el.classList.add('visible'), 50);
 });
+}
+
+// --- LIGHTBOX LOGIC ---
+function openLightbox(src) {
+  let lightbox = document.getElementById('lightbox');
+  if (!lightbox) {
+    lightbox = document.createElement('div');
+    lightbox.id = 'lightbox';
+    lightbox.className = 'lightbox';
+    lightbox.innerHTML = `
+      <div class="lightbox-content">
+        <span class="lightbox-close">&times;</span>
+        <img id="lightbox-img" src="" alt="Full View">
+      </div>
+    `;
+    document.body.appendChild(lightbox);
+    
+    lightbox.querySelector('.lightbox-close').addEventListener('click', () => {
+      lightbox.classList.remove('active');
+    });
+    
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) lightbox.classList.remove('active');
+    });
+  }
+  
+  const img = document.getElementById('lightbox-img');
+  img.src = src;
+  lightbox.classList.add('active');
 }
 
 // Call on load

@@ -100,9 +100,25 @@
         const tagsArray = proj.tags ? proj.tags.split(',').map(t => t.trim()) : [];
         const tagsHtml = tagsArray.map(t => `<span class="project-tag" style="background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.2); padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; color: var(--gold);">${t}</span>`).join(' ');
 
-        let bannerContent = `<i class="fas fa-image"></i>`;
+        // Image Gallery HTML
+        let galleryHtml = '';
         if (proj.image_url) {
-          bannerContent = `<img src="${proj.image_url}" alt="${proj.title}">`;
+          galleryHtml += `
+            <div class="gallery-item reveal" onclick="openLightbox('${proj.image_url}')">
+              <img src="${proj.image_url}" alt="Main Project Image">
+            </div>
+          `;
+        }
+        
+        if (proj.additional_images) {
+          const additionalPaths = proj.additional_images.split('|');
+          additionalPaths.forEach(path => {
+            galleryHtml += `
+              <div class="gallery-item reveal" onclick="openLightbox('${path}')">
+                <img src="${path}" alt="Project Gallery Image">
+              </div>
+            `;
+          });
         }
 
         container.innerHTML = `
@@ -111,20 +127,22 @@
             <div class="project-meta">
               <div class="meta-item">
                 <span class="meta-label">Role</span>
-                <span class="meta-value">${proj.role || 'Developer'}</span>
+                <span class="meta-value">${proj.role || 'Contributor'}</span>
               </div>
               <div class="meta-item">
-                <span class="meta-label">Technologies</span>
-                <span class="meta-value">${tagsHtml || 'N/A'}</span>
+                <span class="meta-label">Tags</span>
+                <span class="meta-value">${proj.tags}</span>
               </div>
             </div>
             <div class="project-media">
-              ${renderMediaIcons(proj.media)}
+              ${renderMediaIcons(proj.media || proj[""])}
             </div>
           </div>
-          <div class="project-banner reveal">
-            ${bannerContent}
+          
+          <div class="project-gallery">
+            ${galleryHtml}
           </div>
+
           <div class="project-content reveal">
             <p>${(proj.detailed_description || proj.short_description).replace(/\n/g, '<br>')}</p>
           </div>

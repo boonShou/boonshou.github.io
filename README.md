@@ -22,10 +22,16 @@ This approach was chosen because:
 
 For each project in my portfolio, I have implemented a dynamic media links system that is fully controlled through the Admin Panel.
 
-### How it works:
-- When adding or editing a project in the Admin Panel, I can add multiple media links per project.
-- Each media link has a Type (chosen from a dropdown: GitHub, Live Demo, YouTube, LinkedIn, Website, or Other) and a URL.
-- I can add as many or as few media links as needed per project — if a project has 3 links, 3 icon buttons will appear; if it has 1 link, only 1 icon button will appear.
+### 🖼️ Multi-Image Gallery & Lightbox
+Projects now support an unlimited number of additional images, displayed in a beautiful grid on the project detail page.
+- **Lightbox**: All images are clickable. When clicked, they open in a premium, full-screen viewer with a blurred background.
+- **Admin Usage**: In the project modal, click "Add Image Path" to add rows for additional relative paths (e.g., `images/gallery1.jpg`).
+- **Data Format**: Additional images are stored as a pipe-delimited string (`path1|path2|path3`) in Column I of the Google Sheet.
+
+### 🔗 Dynamic Media Links
+Each project card and detail page displays social/demo links as recognizable icon buttons.
+- **Supported Types**: GitHub, Live Demo, YouTube, LinkedIn, Website, and Other.
+- **Storage**: Links are stored as `type:URL|type:URL` in Column H.
 
 ### How it appears on the portfolio:
 - Each project card displays the media links as icon buttons using recognisable logos (GitHub logo, globe icon for Live Demo, YouTube icon, LinkedIn icon etc.).

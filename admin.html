@@ -97,9 +97,17 @@
     </div>
 
     <div class="form-group">
-      <label>Image Path (Relative GitHub Path)</label>
+      <label>Main Image Path (Relative GitHub Path)</label>
       <input type="text" id="proj-image" placeholder="e.g. images/project1.jpg">
       <small style="color: var(--light-text); font-size: 0.8rem; margin-top: 5px; display: block;">Upload image to the 'images/' folder in your GitHub repo first.</small>
+    </div>
+
+    <div class="form-group">
+      <label>Additional Images Gallery</label>
+      <div id="additional-images-container">
+        <!-- Image rows will be added here -->
+      </div>
+      <button type="button" class="add-link-btn" style="background: var(--navy3);" onclick="addImageRow()"><i class="fas fa-image"></i> Add Image Path</button>
     </div>
 
     <div class="form-group">

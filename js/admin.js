@@ -65,6 +65,17 @@ tbody.appendChild(tr);
 });
 }
 
+function addImageRow(url = '') {
+const container = document.getElementById('additional-images-container');
+const row = document.createElement('div');
+row.className = 'media-link-row';
+row.innerHTML = `
+<input type="text" class="additional-image-url" placeholder="e.g. images/project-gallery1.jpg" value="${url}">
+<button type="button" class="remove-link-btn" onclick="this.parentElement.remove()">&times;</button>
+`;
+container.appendChild(row);
+}
+
 function addMediaRow(type = '', url = '') {
 const container = document.getElementById('media-links-container');
 const row = document.createElement('div');
@@ -94,6 +105,7 @@ document.getElementById('proj-short').value = '';
 document.getElementById('proj-detailed').value = '';
 document.getElementById('proj-tags').value = '';
 document.getElementById('proj-image').value = '';
+document.getElementById('additional-images-container').innerHTML = '';
 document.getElementById('media-links-container').innerHTML = '';
 }
 
@@ -113,6 +125,12 @@ document.getElementById('proj-short').value = proj.short_description;
 document.getElementById('proj-detailed').value = proj.detailed_description;
 document.getElementById('proj-tags').value = proj.tags;
 document.getElementById('proj-image').value = proj.image_url;
+
+// Populate additional images
+if (proj.additional_images) {
+const paths = proj.additional_images.split('|');
+paths.forEach(path => addImageRow(path));
+}
 
 // Populate media links
 if (proj.media) {
@@ -144,6 +162,7 @@ short_description: document.getElementById('proj-short').value,
 detailed_description: document.getElementById('proj-detailed').value,
 tags: document.getElementById('proj-tags').value,
 image_url: document.getElementById('proj-image').value,
+additional_images: Array.from(document.querySelectorAll('.additional-image-url')).map(input => input.value).filter(x => x).join('|'),
 media: Array.from(document.querySelectorAll('.media-link-row')).map(row => {
 const type = row.querySelector('.media-type').value;
 const url = row.querySelector('.media-url').value;
