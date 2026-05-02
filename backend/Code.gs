@@ -1,8 +1,14 @@
 var SHEET_NAME = 'Projects';
+var SPREADSHEET_ID = 'YOUR_GOOGLE_SHEET_ID_HERE'; // Replace with your actual Sheet ID
 var SCRIPT_PROP = PropertiesService.getScriptProperties(); // Used for locking
 
+function getDoc() {
+  // Use openById since getActiveSpreadsheet() only works for bound scripts
+  return SpreadsheetApp.openById(SPREADSHEET_ID);
+}
+
 function setup() {
-  var doc = SpreadsheetApp.getActiveSpreadsheet();
+  var doc = getDoc();
   var sheet = doc.getSheetByName(SHEET_NAME);
   if (!sheet) {
     sheet = doc.insertSheet(SHEET_NAME);
@@ -15,38 +21,45 @@ function setup() {
 
 // Handle GET requests (Read Projects)
 function doGet(e) {
-  var doc = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = doc.getSheetByName(SHEET_NAME);
-  
-  if (!sheet) {
+  try {
+    var doc = getDoc();
+    var sheet = doc.getSheetByName(SHEET_NAME);
+    
+    if (!sheet) {
+      return ContentService.createTextOutput(JSON.stringify({
+        status: "error",
+        message: "Sheet not found. Run setup() first."
+      })).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    var rows = sheet.getDataRange().getValues();
+    var headers = rows.shift(); // Remove headers
+    
+    var data = rows.map(function(row) {
+      var item = {};
+      headers.forEach(function(header, index) {
+        item[header] = row[index];
+      });
+      return item;
+    });
+
+    // If fetching a specific ID
+    if (e.parameter && e.parameter.id) {
+      data = data.filter(function(item) {
+        return item.id == e.parameter.id;
+      });
+    }
+
+    return ContentService.createTextOutput(JSON.stringify({
+      status: "success",
+      data: data
+    })).setMimeType(ContentService.MimeType.JSON);
+  } catch(e) {
     return ContentService.createTextOutput(JSON.stringify({
       status: "error",
-      message: "Sheet not found. Run setup() first."
+      message: e.toString()
     })).setMimeType(ContentService.MimeType.JSON);
   }
-
-  var rows = sheet.getDataRange().getValues();
-  var headers = rows.shift(); // Remove headers
-  
-  var data = rows.map(function(row) {
-    var item = {};
-    headers.forEach(function(header, index) {
-      item[header] = row[index];
-    });
-    return item;
-  });
-
-  // If fetching a specific ID
-  if (e.parameter.id) {
-    data = data.filter(function(item) {
-      return item.id == e.parameter.id;
-    });
-  }
-
-  return ContentService.createTextOutput(JSON.stringify({
-    status: "success",
-    data: data
-  })).setMimeType(ContentService.MimeType.JSON);
 }
 
 // Handle POST requests (Create, Update, Delete)
@@ -55,7 +68,7 @@ function doPost(e) {
   lock.tryLock(10000);
   
   try {
-    var doc = SpreadsheetApp.getActiveSpreadsheet();
+    var doc = getDoc();
     var sheet = doc.getSheetByName(SHEET_NAME);
     
     var params = JSON.parse(e.postData.contents);
