@@ -88,8 +88,9 @@
     </div>
 
     <div class="form-group">
-      <label>Image URL</label>
-      <input type="text" id="proj-image" placeholder="https://...">
+      <label>Image Path (Relative GitHub Path)</label>
+      <input type="text" id="proj-image" placeholder="e.g. images/project1.jpg">
+      <small style="color: var(--light-text); font-size: 0.8rem; margin-top: 5px; display: block;">Upload image to the 'images/' folder in your GitHub repo first.</small>
     </div>
 
     <button class="btn-primary" onclick="saveProject()" id="save-btn" style="width: 100%; margin-top: 1rem;">Save Project</button>
