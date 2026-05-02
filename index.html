@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boon Shoung | Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy2: #112240;
+    --navy3: #1a3a5c;
+    --gold: #c9a84c;
+    --gold2: #e8c56d;
+    --white: #f0f4ff;
+    --grey: #8892a4;
+    --light: #ccd6f6;
+    --accent: #64ffda;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+  body {
+    background: var(--navy);
+    color: var(--light);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--navy); }
+  ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 999;
+    background: rgba(10,22,40,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+    padding: 0 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 70px;
+    transition: all 0.3s;
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 1px;
+  }
+  .nav-logo span { color: var(--white); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--grey); text-decoration: none;
+    font-size: 0.85rem; font-weight: 500; letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: color 0.3s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -4px; left: 0;
+    width: 0; height: 2px; background: var(--gold);
+    transition: width 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a:hover::after { width: 100%; }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .hamburger span { width: 24px; height: 2px; background: var(--gold); transition: 0.3s; }
+
+  /* ── SECTIONS ── */
+  section { min-height: 100vh; padding: 120px 8% 80px; }
+
+  /* ── HERO ── */
+  #home {
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    background: radial-gradient(ellipse at 20% 50%, rgba(28,60,100,0.5) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(201,168,76,0.08) 0%, transparent 50%);
+  }
+  .hero-bg {
+    position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+  }
+  .hero-bg::before {
+    content: '';
+    position: absolute; top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: repeating-linear-gradient(
+      45deg, transparent, transparent 40px,
+      rgba(201,168,76,0.015) 40px, rgba(201,168,76,0.015) 41px
+    );
+  }
+  .hero-content { position: relative; z-index: 2; max-width: 800px; }
+  .hero-greeting {
+    color: var(--gold); font-size: 1rem; font-weight: 500;
+    letter-spacing: 3px; text-transform: uppercase;
+    margin-bottom: 1rem;
+    opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+  }
+  .hero-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 900; line-height: 1.1;
+    color: var(--white);
+    margin-bottom: 1rem;
+    opacity: 0; animation: fadeUp 0.8s 0.4s forwards;
+  }
+  .hero-name span { color: var(--gold); }
+  .hero-title {
+    font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+    color: var(--grey); font-weight: 300;
+    margin-bottom: 1.5rem;
+    opacity: 0; animation: fadeUp 0.8s 0.6s forwards;
+  }
+  .hero-desc {
+    font-size: 1rem; color: var(--grey); line-height: 1.8;
+    max-width: 520px; margin-bottom: 2.5rem;
+    opacity: 0; animation: fadeUp 0.8s 0.8s forwards;
+  }
+  .hero-btns {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    opacity: 0; animation: fadeUp 0.8s 1s forwards;
+  }
+  .btn-primary {
+    padding: 14px 32px; background: var(--gold);
+    color: var(--navy); font-weight: 600; font-size: 0.9rem;
+    border: none; border-radius: 4px; cursor: pointer;
+    text-decoration: none; letter-spacing: 1px;
+    transition: all 0.3s; text-transform: uppercase;
+  }
+  .btn-primary:hover { background: var(--gold2); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(201,168,76,0.3); }
+  .btn-outline {
+    padding: 14px 32px; background: transparent;
+    color: var(--gold); font-weight: 600; font-size: 0.9rem;
+    border: 1px solid var(--gold); border-radius: 4px; cursor: pointer;
+    text-decoration: none; letter-spacing: 1px;
+    transition: all 0.3s; text-transform: uppercase;
+  }
+  .btn-outline:hover { background: rgba(201,168,76,0.1); transform: translateY(-2px); }
+  .hero-scroll {
+    position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    color: var(--grey); font-size: 0.75rem; letter-spacing: 2px;
+    animation: bounce 2s infinite;
+  }
+  .hero-scroll i { font-size: 1.2rem; color: var(--gold); }
+
+  /* ── SECTION TITLE ── */
+  .section-header { margin-bottom: 3rem; }
+  .section-tag {
+    color: var(--gold); font-size: 0.8rem; font-weight: 600;
+    letter-spacing: 3px; text-transform: uppercase; margin-bottom: 0.5rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700; color: var(--white);
+    position: relative; display: inline-block;
+  }
+  .section-title::after {
+    content: ''; display: block;
+    width: 60px; height: 3px; background: var(--gold);
+    margin-top: 10px;
+  }
+  .section-subtitle { color: var(--grey); margin-top: 1rem; max-width: 500px; line-height: 1.7; }
+
+  /* ── ABOUT ── */
+  #about { background: var(--navy2); }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1.5fr; gap: 5rem; align-items: center;
+  }
+  .about-img-wrap {
+    position: relative;
+  }
+  .about-img-frame {
+    width: 100%; padding-top: 120%;
+    background: linear-gradient(135deg, var(--navy3), var(--navy));
+    border: 2px solid rgba(201,168,76,0.3);
+    border-radius: 8px;
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .about-img-frame::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      -45deg, transparent, transparent 10px,
+      rgba(201,168,76,0.03) 10px, rgba(201,168,76,0.03) 11px
+    );
+  }
+  .about-img-placeholder {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 1rem;
+  }
+  .about-img-placeholder i { font-size: 5rem; color: rgba(201,168,76,0.3); }
+  .about-img-placeholder p { color: var(--grey); font-size: 0.85rem; letter-spacing: 1px; }
+  .about-frame-deco {
+    position: absolute; bottom: -15px; right: -15px;
+    width: 80%; height: 80%;
+    border: 2px solid rgba(201,168,76,0.15);
+    border-radius: 8px; z-index: -1;
+  }
+  .about-info h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem; color: var(--white); margin-bottom: 1rem;
+  }
+  .about-info p { color: var(--grey); line-height: 1.9; margin-bottom: 1.5rem; }
+  .about-details { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; }
+  .detail-item { display: flex; flex-direction: column; gap: 3px; }
+  .detail-label { font-size: 0.75rem; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; }
+  .detail-value { font-size: 0.9rem; color: var(--light); font-weight: 500; }
+  .about-socials { display: flex; gap: 1rem; }
+  .social-btn {
+    width: 42px; height: 42px;
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    color: var(--grey); text-decoration: none; font-size: 1rem;
+    transition: all 0.3s;
+  }
+  .social-btn:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-3px); }
+
+  /* ── EDUCATION ── */
+  #education { background: var(--navy); }
+  .edu-timeline { position: relative; padding-left: 2rem; }
+  .edu-timeline::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 2px; background: linear-gradient(to bottom, var(--gold), transparent);
+  }
+  .edu-item {
+    position: relative; margin-bottom: 3rem;
+    background: rgba(17,34,64,0.6);
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 12px; padding: 2rem;
+    transition: all 0.3s;
+  }
+  .edu-item:hover {
+    border-color: rgba(201,168,76,0.4);
+    transform: translateX(8px);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  }
+  .edu-item::before {
+    content: ''; position: absolute;
+    left: -2.6rem; top: 2rem;
+    width: 14px; height: 14px;
+    background: var(--gold); border-radius: 50%;
+    border: 3px solid var(--navy);
+    box-shadow: 0 0 0 3px rgba(201,168,76,0.3);
+  }
+  .edu-year {
+    display: inline-block;
+    background: rgba(201,168,76,0.15);
+    color: var(--gold); font-size: 0.8rem;
+    padding: 4px 12px; border-radius: 20px;
+    font-weight: 600; letter-spacing: 1px;
+    margin-bottom: 0.8rem;
+  }
+  .edu-school {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem; color: var(--white); margin-bottom: 0.3rem;
+  }
+  .edu-degree { color: var(--gold2); font-weight: 500; margin-bottom: 0.3rem; }
+  .edu-field { color: var(--grey); font-size: 0.9rem; }
+  .edu-badge {
+    position: absolute; top: 1.5rem; right: 1.5rem;
+    width: 50px; height: 50px;
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    color: var(--gold); font-size: 1.2rem;
+  }
+
+  /* ── SKILLS ── */
+  #skills { background: var(--navy2); }
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+  .skill-card {
+    background: rgba(10,22,40,0.8);
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 12px; padding: 2rem;
+    transition: all 0.3s;
+  }
+  .skill-card:hover {
+    border-color: rgba(201,168,76,0.4);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+  }
+  .skill-card-icon {
+    width: 55px; height: 55px;
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 12px; display: flex; align-items: center; justify-content: center;
+    color: var(--gold); font-size: 1.4rem; margin-bottom: 1.2rem;
+  }
+  .skill-card h3 { color: var(--white); font-size: 1.1rem; margin-bottom: 1rem; }
+  .skill-list { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .skill-tag {
+    background: rgba(201,168,76,0.08);
+    border: 1px solid rgba(201,168,76,0.2);
+    color: var(--light); font-size: 0.8rem;
+    padding: 5px 12px; border-radius: 20px;
+    transition: all 0.2s;
+  }
+  .skill-tag:hover { background: rgba(201,168,76,0.2); color: var(--gold); }
+
+  /* ── PROJECTS ── */
+  #projects { background: var(--navy); }
+  .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+  .project-card {
+    background: rgba(17,34,64,0.6);
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 12px; overflow: hidden;
+    transition: all 0.3s;
+  }
+  .project-card:hover {
+    border-color: rgba(201,168,76,0.4);
+    transform: translateY(-8px);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+  }
+  .project-img {
+    height: 200px;
+    background: linear-gradient(135deg, var(--navy3), var(--navy2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3rem; color: rgba(201,168,76,0.3);
+    position: relative; overflow: hidden;
+  }
+  .project-img::before {
+    content: ''; position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      45deg, transparent, transparent 20px,
+      rgba(201,168,76,0.02) 20px, rgba(201,168,76,0.02) 21px
+    );
+  }
+  .project-num {
+    position: absolute; top: 1rem; left: 1rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem; font-weight: 900;
+    color: rgba(201,168,76,0.08); line-height: 1;
+  }
+  .project-body { padding: 1.5rem; }
+  .project-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .project-tag {
+    font-size: 0.7rem; color: var(--gold);
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.2);
+    padding: 3px 10px; border-radius: 20px;
+    letter-spacing: 1px; text-transform: uppercase;
+  }
+  .project-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--white); margin-bottom: 0.6rem; }
+  .project-desc { color: var(--grey); font-size: 0.9rem; line-height: 1.7; }
+  .project-placeholder {
+    border: 2px dashed rgba(201,168,76,0.2);
+    background: rgba(201,168,76,0.02);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 0.5rem; padding: 3rem;
+    border-radius: 12px; text-align: center;
+    grid-column: 1 / -1;
+  }
+  .project-placeholder i { font-size: 2rem; color: rgba(201,168,76,0.3); }
+  .project-placeholder p { color: var(--grey); font-size: 0.9rem; }
+
+  /* ── QUALITIES ── */
+  #qualities { background: var(--navy2); }
+  .qualities-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
+  .quality-card {
+    background: rgba(10,22,40,0.8);
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 12px; padding: 2rem 1.5rem; text-align: center;
+    transition: all 0.3s;
+  }
+  .quality-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-6px);
+    box-shadow: 0 0 30px rgba(201,168,76,0.15);
+  }
+  .quality-icon {
+    width: 65px; height: 65px; margin: 0 auto 1.2rem;
+    background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.05));
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; color: var(--gold);
+    transition: all 0.3s;
+  }
+  .quality-card:hover .quality-icon { background: var(--gold); color: var(--navy); }
+  .quality-title { color: var(--white); font-weight: 600; margin-bottom: 0.5rem; }
+  .quality-desc { color: var(--grey); font-size: 0.85rem; line-height: 1.6; }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--navy); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 4rem; }
+  .contact-info-wrap h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; color: var(--white); margin-bottom: 0.8rem;
+  }
+  .contact-info-wrap p { color: var(--grey); line-height: 1.8; margin-bottom: 2rem; }
+  .contact-items { display: flex; flex-direction: column; gap: 1.2rem; }
+  .contact-item {
+    display: flex; align-items: center; gap: 1.2rem;
+    padding: 1rem 1.2rem;
+    background: rgba(17,34,64,0.6);
+    border: 1px solid rgba(201,168,76,0.1);
+    border-radius: 10px; transition: all 0.3s;
+    text-decoration: none;
+  }
+  .contact-item:hover { border-color: rgba(201,168,76,0.4); transform: translateX(6px); }
+  .contact-item-icon {
+    width: 44px; height: 44px; flex-shrink: 0;
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    color: var(--gold); font-size: 1rem;
+  }
+  .contact-item-text { display: flex; flex-direction: column; }
+  .contact-item-label { font-size: 0.75rem; color: var(--gold); letter-spacing: 1px; text-transform: uppercase; }
+  .contact-item-value { color: var(--light); font-size: 0.9rem; font-weight: 500; }
+
+  /* Contact Form */
+  .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+  .form-group label { font-size: 0.8rem; color: var(--gold); letter-spacing: 1px; text-transform: uppercase; }
+  .form-group input, .form-group textarea {
+    background: rgba(17,34,64,0.8);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 8px; padding: 12px 16px;
+    color: var(--light); font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem; transition: all 0.3s; outline: none;
+    resize: none;
+  }
+  .form-group input:focus, .form-group textarea:focus {
+    border-color: var(--gold);
+    background: rgba(17,34,64,1);
+    box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
+  }
+  .form-group input::placeholder, .form-group textarea::placeholder { color: var(--grey); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+  .btn-submit {
+    padding: 14px 32px; background: var(--gold);
+    color: var(--navy); font-weight: 700; font-size: 0.9rem;
+    border: none; border-radius: 8px; cursor: pointer;
+    text-transform: uppercase; letter-spacing: 1px;
+    transition: all 0.3s; width: 100%;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .btn-submit:hover { background: var(--gold2); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(201,168,76,0.3); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy2);
+    border-top: 1px solid rgba(201,168,76,0.1);
+    padding: 2rem 8%; text-align: center;
+    color: var(--grey); font-size: 0.85rem;
+  }
+  footer span { color: var(--gold); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-10px); }
+  }
+
+  /* Intersection Observer fade-in */
+  .reveal { opacity: 0; transform: translateY(40px); transition: all 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .about-grid { grid-template-columns: 1fr; }
+    .about-img-wrap { max-width: 280px; margin: 0 auto; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; flex-direction: column; position: absolute; top: 70px; left: 0; width: 100%; background: var(--navy); padding: 1.5rem 5%; gap: 1.2rem; border-bottom: 1px solid rgba(201,168,76,0.1); }
+    .nav-links.open { display: flex; }
+    .hamburger { display: flex; }
+  }
+  @media (max-width: 600px) {
+    section { padding: 100px 5% 60px; }
+    .form-row { grid-template-columns: 1fr; }
+    .about-details { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo">BS<span>.</span></div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#qualities">Qualities</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleNav()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <p class="hero-greeting">👋 Welcome to my portfolio</p>
+    <h1 class="hero-name">Boon <span>Shoung</span><br>A/L Kok Hoe</h1>
+    <p class="hero-title">Bachelor of Computer Science (Artificial Intelligence)</p>
+    <p class="hero-desc">A passionate AI student at Universiti Teknikal Malaysia Melaka, dedicated to building intelligent solutions and meaningful digital experiences.</p>
+    <div class="hero-btns">
+      <a href="#projects" class="btn-primary">View My Work</a>
+      <a href="#contact" class="btn-outline">Get In Touch</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <i class="fas fa-chevron-down"></i>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header reveal">
+    <p class="section-tag">01 — About</p>
+    <h2 class="section-title">Who I Am</h2>
+    <p class="section-subtitle">Get to know me — my background, where I'm from, and what drives me.</p>
+  </div>
+  <div class="about-grid">
+    <div class="about-img-wrap reveal">
+      <div class="about-img-frame">
+        <div class="about-img-placeholder">
+          <i class="fas fa-user"></i>
+          <p>Your Photo Here</p>
+        </div>
+      </div>
+      <div class="about-frame-deco"></div>
+    </div>
+    <div class="about-info reveal">
+      <h3>Hi, I'm Boon Shoung</h3>
+      <p>I am currently pursuing my Bachelor of Computer Science with a specialisation in Artificial Intelligence at Universiti Teknikal Malaysia Melaka (UTeM). My journey in technology started from Kolej Komuniti and Polimas, and I continue to grow my skills and knowledge every day.</p>
+      <p>I am passionate about AI, software development, and creating user-centered digital experiences. I enjoy solving complex problems and turning ideas into reality through code.</p>
+      <div class="about-details">
+        <div class="detail-item">
+          <span class="detail-label">Name</span>
+          <span class="detail-value">Boon Shoung A/L Kok Hoe</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Birthday</span>
+          <span class="detail-value">April 8</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Location</span>
+          <span class="detail-value">Jitra, Malaysia</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">University</span>
+          <span class="detail-value">UTeM, Melaka</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Email</span>
+          <span class="detail-value">kolssk18f026@gmail.com</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Phone</span>
+          <span class="detail-value">01133230751</span>
+        </div>
+      </div>
+      <div class="about-socials">
+        <a href="https://linkedin.com/in/boon-shoung-77222b172" target="_blank" class="social-btn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="mailto:kolssk18f026@gmail.com" class="social-btn"><i class="fas fa-envelope"></i></a>
+        <a href="tel:01133230751" class="social-btn"><i class="fas fa-phone"></i></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="section-header reveal">
+    <p class="section-tag">02 — Education</p>
+    <h2 class="section-title">Academic History</h2>
+    <p class="section-subtitle">My educational journey and academic achievements.</p>
+  </div>
+  <div class="edu-timeline">
+    <div class="edu-item reveal">
+      <div class="edu-badge"><i class="fas fa-graduation-cap"></i></div>
+      <span class="edu-year">2024 — Present</span>
+      <h3 class="edu-school">Universiti Teknikal Malaysia Melaka (UTeM)</h3>
+      <p class="edu-degree">Bachelor of Computer Science (Artificial Intelligence)</p>
+      <p class="edu-field">Field of Study: Artificial Intelligence</p>
+    </div>
+    <div class="edu-item reveal">
+      <div class="edu-badge"><i class="fas fa-university"></i></div>
+      <span class="edu-year">Dec 2020 — Sep 2024</span>
+      <h3 class="edu-school">Polimas (Politeknik Sultan Abdul Halim Mu'adzam Shah)</h3>
+      <p class="edu-degree">Diploma of Education</p>
+      <p class="edu-field">Polytechnic Diploma Programme</p>
+    </div>
+    <div class="edu-item reveal">
+      <div class="edu-badge"><i class="fas fa-school"></i></div>
+      <span class="edu-year">Jan 2018 — Apr 2020</span>
+      <h3 class="edu-school">Kolej Komuniti Bandar Darul Aman</h3>
+      <p class="edu-degree">Sijil (Certificate)</p>
+      <p class="edu-field">Foundation Studies</p>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-header reveal">
+    <p class="section-tag">03 — Skills</p>
+    <h2 class="section-title">Technical Skills</h2>
+    <p class="section-subtitle">Technologies and tools I work with.</p>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-card reveal">
+      <div class="skill-card-icon"><i class="fas fa-code"></i></div>
+      <h3>Programming Languages</h3>
+      <ul class="skill-list">
+        <li class="skill-tag">Python</li>
+        <li class="skill-tag">Java</li>
+        <li class="skill-tag">C++</li>
+        <li class="skill-tag">JavaScript</li>
+        <li class="skill-tag">HTML/CSS</li>
+      </ul>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-card-icon"><i class="fas fa-brain"></i></div>
+      <h3>AI & Data Science</h3>
+      <ul class="skill-list">
+        <li class="skill-tag">Machine Learning</li>
+        <li class="skill-tag">Data Analysis</li>
+        <li class="skill-tag">Neural Networks</li>
+        <li class="skill-tag">TensorFlow</li>
+        <li class="skill-tag">NumPy</li>
+      </ul>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-card-icon"><i class="fas fa-tools"></i></div>
+      <h3>Tools & Software</h3>
+      <ul class="skill-list">
+        <li class="skill-tag">Microsoft Office</li>
+        <li class="skill-tag">Git & GitHub</li>
+        <li class="skill-tag">VS Code</li>
+        <li class="skill-tag">Figma</li>
+        <li class="skill-tag">MySQL</li>
+      </ul>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-card-icon"><i class="fas fa-users"></i></div>
+      <h3>Soft Skills</h3>
+      <ul class="skill-list">
+        <li class="skill-tag">Teamwork</li>
+        <li class="skill-tag">Communication</li>
+        <li class="skill-tag">Problem Solving</li>
+        <li class="skill-tag">Time Management</li>
+        <li class="skill-tag">Leadership</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-header reveal">
+    <p class="section-tag">04 — Projects</p>
+    <h2 class="section-title">My Work</h2>
+    <p class="section-subtitle">Projects and works I have created during my studies and beyond.</p>
+  </div>
+  <div class="projects-grid">
+    <div class="project-card reveal">
+      <div class="project-img">
+        <span class="project-num">01</span>
+        <i class="fas fa-robot"></i>
+      </div>
+      <div class="project-body">
+        <div class="project-tags">
+          <span class="project-tag">AI</span>
+          <span class="project-tag">Python</span>
+        </div>
+        <h3 class="project-title">Project Title Here</h3>
+        <p class="project-desc">Add your project description here. Describe what it does, what technologies you used, and what you learned from it.</p>
+      </div>
+    </div>
+    <div class="project-card reveal">
+      <div class="project-img">
+        <span class="project-num">02</span>
+        <i class="fas fa-laptop-code"></i>
+      </div>
+      <div class="project-body">
+        <div class="project-tags">
+          <span class="project-tag">Web</span>
+          <span class="project-tag">HTML/CSS</span>
+        </div>
+        <h3 class="project-title">Project Title Here</h3>
+        <p class="project-desc">Add your project description here. Describe what it does, what technologies you used, and what you learned from it.</p>
+      </div>
+    </div>
+    <div class="project-placeholder reveal">
+      <i class="fas fa-plus-circle"></i>
+      <p>More projects coming soon — add your own projects here!</p>
+    </div>
+  </div>
+</section>
+
+<!-- QUALITIES -->
+<section id="qualities">
+  <div class="section-header reveal">
+    <p class="section-tag">05 — Qualities</p>
+    <h2 class="section-title">Personal Qualities</h2>
+    <p class="section-subtitle">The values and traits that define how I work and collaborate.</p>
+  </div>
+  <div class="qualities-grid">
+    <div class="quality-card reveal">
+      <div class="quality-icon"><i class="fas fa-lightbulb"></i></div>
+      <h4 class="quality-title">Creative Thinker</h4>
+      <p class="quality-desc">I approach problems with a creative mindset, finding unique and effective solutions.</p>
+    </div>
+    <div class="quality-card reveal">
+      <div class="quality-icon"><i class="fas fa-users"></i></div>
+      <h4 class="quality-title">Team Player</h4>
+      <p class="quality-desc">I thrive in collaborative environments and enjoy working with diverse teams toward shared goals.</p>
+    </div>
+    <div class="quality-card reveal">
+      <div class="quality-icon"><i class="fas fa-clock"></i></div>
+      <h4 class="quality-title">Dedicated</h4>
+      <p class="quality-desc">I am committed to delivering quality work on time and going the extra mile when needed.</p>
+    </div>
+    <div class="quality-card reveal">
+      <div class="quality-icon"><i class="fas fa-book-open"></i></div>
+      <h4 class="quality-title">Continuous Learner</h4>
+      <p class="quality-desc">I am always eager to learn new technologies, skills, and improve myself every day.</p>
+    </div>
+    <div class="quality-card reveal">
+      <div class="quality-icon"><i class="fas fa-comments"></i></div>
+      <h4 class="quality-title">Good Communicator</h4>
+      <p class="quality-desc">I can clearly express ideas and listen actively to ensure effective collaboration.</p>
+    </div>
+    <div class="quality-card reveal">
+      <div class="quality-icon"><i class="fas fa-bullseye"></i></div>
+      <h4 class="quality-title">Goal-Oriented</h4>
+      <p class="quality-desc">I set clear goals and stay focused on achieving results that matter.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-header reveal">
+    <p class="section-tag">06 — Contact</p>
+    <h2 class="section-title">Get In Touch</h2>
+    <p class="section-subtitle">Feel free to reach out for collaborations, opportunities, or just a chat!</p>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-info-wrap reveal">
+      <h3>Let's Connect</h3>
+      <p>Whether you have a project in mind, an opportunity to share, or just want to say hello — my inbox is always open.</p>
+      <div class="contact-items">
+        <a href="mailto:kolssk18f026@gmail.com" class="contact-item">
+          <div class="contact-item-icon"><i class="fas fa-envelope"></i></div>
+          <div class="contact-item-text">
+            <span class="contact-item-label">Email</span>
+            <span class="contact-item-value">kolssk18f026@gmail.com</span>
+          </div>
+        </a>
+        <a href="tel:01133230751" class="contact-item">
+          <div class="contact-item-icon"><i class="fas fa-phone"></i></div>
+          <div class="contact-item-text">
+            <span class="contact-item-label">Phone</span>
+            <span class="contact-item-value">01133230751</span>
+          </div>
+        </a>
+        <a href="https://linkedin.com/in/boon-shoung-77222b172" target="_blank" class="contact-item">
+          <div class="contact-item-icon"><i class="fab fa-linkedin-in"></i></div>
+          <div class="contact-item-text">
+            <span class="contact-item-label">LinkedIn</span>
+            <span class="contact-item-value">boon-shoung-77222b172</span>
+          </div>
+        </a>
+        <div class="contact-item">
+          <div class="contact-item-icon"><i class="fas fa-map-marker-alt"></i></div>
+          <div class="contact-item-text">
+            <span class="contact-item-label">Location</span>
+            <span class="contact-item-value">Jitra, Kedah, Malaysia</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="contact-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Your Name</label>
+            <input type="text" placeholder="e.g. Ahmad Razif">
+          </div>
+          <div class="form-group">
+            <label>Your Email</label>
+            <input type="email" placeholder="email@example.com">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Subject</label>
+          <input type="text" placeholder="What is this about?">
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea rows="6" placeholder="Write your message here..."></textarea>
+        </div>
+        <button class="btn-submit" onclick="submitForm()">
+          <i class="fas fa-paper-plane"></i> &nbsp; Send Message
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>Designed & Built by <span>Boon Shoung A/L Kok Hoe</span> &nbsp;·&nbsp; © 2025 All Rights Reserved</p>
+</footer>
+
+<script>
+  // Nav toggle
+  function toggleNav() {
+    document.getElementById('navLinks').classList.toggle('open');
+  }
+
+  // Close nav on link click
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+      document.getElementById('navLinks').classList.remove('open');
+    });
+  });
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Active nav highlight
+  const sections = document.querySelectorAll('section');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 100) current = s.getAttribute('id');
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current ? 'var(--gold)' : '';
+    });
+  });
+
+  // Form submit mock
+  function submitForm() {
+    alert('Thank you for your message! I will get back to you soon.');
+  }
+</script>
+</body>
+</html>
