@@ -1,3 +1,4 @@
+console.log("script.js loading...");
 // Nav toggle
 function toggleNav() {
 document.getElementById('navLinks').classList.toggle('open');

@@ -1,3 +1,4 @@
+console.log("admin.js loading...");
 let adminPassword = '';
 let currentProjects = [];
 
