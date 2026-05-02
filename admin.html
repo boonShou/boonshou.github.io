@@ -1,22 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Dashboard | Boon Shoung</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/admin.css">
-<style>
-  .media-link-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
-  .media-link-row select { width: 120px; flex-shrink: 0; }
-  .media-link-row input { flex-grow: 1; }
-  .remove-link-btn { background: #ff4d4d; color: white; border: none; border-radius: 4px; padding: 5px 10px; cursor: pointer; }
-  .remove-link-btn:hover { background: #ff3333; }
-  .add-link-btn { background: #4CAF50; color: white; border: none; border-radius: 4px; padding: 8px 15px; cursor: pointer; margin-bottom: 15px; }
-  .add-link-btn:hover { background: #45a049; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Boon Shoung</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <style>
+    .media-row, .image-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
+    .media-row select, .image-row select { width: 120px; flex-shrink: 0; }
+    .media-row input, .image-row input { flex-grow: 1; }
+    .remove-btn { background: #ff4d4d; color: white; border: none; border-radius: 4px; padding: 5px 10px; cursor: pointer; }
+    .add-btn { background: var(--navy3); color: white; border: none; border-radius: 4px; padding: 8px 15px; cursor: pointer; margin-bottom: 15px; }
+    .add-btn:hover { background: var(--navy2); }
+  </style>
 </head>
 <body>
 
@@ -34,7 +33,6 @@
     <p>Please enter the master password to manage your projects.</p>
     <input type="password" id="admin-password" placeholder="Enter Password">
     <button class="btn-primary" onclick="login()">Login</button>
-    <p id="login-error" style="color: red; margin-top: 10px; display: none;">Invalid password.</p>
   </div>
 </section>
 
@@ -44,7 +42,7 @@
     <button class="btn-primary" onclick="openModal()"><i class="fas fa-plus"></i> Add New Project</button>
   </div>
   
-  <div id="admin-loader" style="text-align: center; margin: 2rem 0;">
+  <div id="admin-loader" style="text-align: center; margin: 2rem 0; display: none;">
     <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--gold);"></i>
     <p>Loading projects...</p>
   </div>
@@ -58,67 +56,61 @@
         <th>Actions</th>
       </tr>
     </thead>
-    <tbody id="projects-tbody">
-      <!-- Rendered via JS -->
-    </tbody>
+    <tbody id="projects-tbody"></tbody>
   </table>
 </section>
 
-<!-- Edit/Add Modal -->
 <div id="project-modal" class="modal">
   <div class="modal-content">
     <span class="close" onclick="closeModal()">&times;</span>
     <h2 id="modal-title">Add Project</h2>
-    <input type="hidden" id="proj-id">
-    
-    <div class="form-group">
-      <label>Title</label>
-      <input type="text" id="proj-title" placeholder="Project Title">
-    </div>
-    
-    <div class="form-group">
-      <label>Role</label>
-      <input type="text" id="proj-role" placeholder="e.g. Lead Developer">
-    </div>
-
-    <div class="form-group">
-      <label>Short Description (For main page)</label>
-      <textarea id="proj-short" rows="2"></textarea>
-    </div>
-
-    <div class="form-group">
-      <label>Detailed Description (For project detail page)</label>
-      <textarea id="proj-detailed" rows="5"></textarea>
-    </div>
-
-    <div class="form-group">
-      <label>Tags (Comma separated)</label>
-      <input type="text" id="proj-tags" placeholder="e.g. Python, AI, Web">
-    </div>
-
-    <div class="form-group">
-      <label>Main Image Path (Relative GitHub Path)</label>
-      <input type="text" id="proj-image" placeholder="e.g. images/project1.jpg">
-      <small style="color: var(--light-text); font-size: 0.8rem; margin-top: 5px; display: block;">Upload image to the 'images/' folder in your GitHub repo first.</small>
-    </div>
-
-    <div class="form-group">
-      <label>Additional Images Gallery</label>
-      <div id="additional-images-container">
-        <!-- Image rows will be added here -->
+    <form id="project-form" onsubmit="event.preventDefault(); saveProject();">
+      <input type="hidden" id="proj-id">
+      
+      <div class="form-group">
+        <label>Title</label>
+        <input type="text" id="proj-title" placeholder="Project Title" required>
       </div>
-      <button type="button" class="add-link-btn" style="background: var(--navy3);" onclick="addImageRow()"><i class="fas fa-image"></i> Add Image Path</button>
-    </div>
-
-    <div class="form-group">
-      <label>Media Links</label>
-      <div id="media-links-container">
-        <!-- Rows will be added here -->
+      
+      <div class="form-group">
+        <label>Role</label>
+        <input type="text" id="proj-role" placeholder="e.g. Lead Developer">
       </div>
-      <button type="button" class="add-link-btn" onclick="addMediaRow()"><i class="fas fa-plus"></i> Add Link</button>
-    </div>
 
-    <button class="btn-primary" onclick="saveProject()" id="save-btn" style="width: 100%; margin-top: 1rem;">Save Project</button>
+      <div class="form-group">
+        <label>Short Description</label>
+        <textarea id="proj-short" rows="2" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Detailed Description</label>
+        <textarea id="proj-detailed" rows="5"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Tags (Comma separated)</label>
+        <input type="text" id="proj-tags" placeholder="e.g. Python, AI, Web">
+      </div>
+
+      <div class="form-group">
+        <label>Main Image Path</label>
+        <input type="text" id="proj-image" placeholder="e.g. images/project1.jpg">
+      </div>
+
+      <div class="form-group">
+        <label>Gallery Images</label>
+        <div id="gallery-container"></div>
+        <button type="button" class="add-btn" onclick="addImageRow()"><i class="fas fa-image"></i> Add Gallery Image</button>
+      </div>
+
+      <div class="form-group">
+        <label>Media Links</label>
+        <div id="media-links-container"></div>
+        <button type="button" class="add-btn" onclick="addMediaRow()"><i class="fas fa-link"></i> Add Media Link</button>
+      </div>
+
+      <button type="submit" class="btn-primary" id="save-btn" style="width: 100%; margin-top: 1rem;">Save Project</button>
+    </form>
   </div>
 </div>
 

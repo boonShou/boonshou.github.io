@@ -1,143 +1,103 @@
-console.log("script.js loading...");
-// Nav toggle
+// --- CONFIGURATION ---
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzN-zKOBzw5I96FiPyeiyk_LzM8EN9SkF6wMZYXLl136aXJ_bvmr5yQkiOn8FFgzMIE/exec';
+
+// --- UI HELPERS ---
 function toggleNav() {
-document.getElementById('navLinks').classList.toggle('open');
+  const navLinks = document.getElementById('navLinks');
+  if (navLinks) navLinks.classList.toggle('open');
 }
 
 // Close nav on link click
-document.querySelectorAll('.nav-links a').forEach(link => {
-link.addEventListener('click', () => {
-document.getElementById('navLinks').classList.remove('open');
-});
-});
-
-// Scroll reveal
-const observer = new IntersectionObserver((entries) => {
-entries.forEach((entry, i) => {
-if (entry.isIntersecting) {
-setTimeout(() => entry.target.classList.add('visible'), i * 80);
-}
-});
-}, { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-// Active nav highlight
-const sections = document.querySelectorAll('section');
-const navLinks = document.querySelectorAll('.nav-links a');
-window.addEventListener('scroll', () => {
-let current = '';
-sections.forEach(s => {
-if (window.scrollY >= s.offsetTop - 100) current = s.getAttribute('id');
-});
-navLinks.forEach(a => {
-a.style.color = a.getAttribute('href') === '#' + current ? 'var(--gold)' : '';
-});
+document.addEventListener('click', (e) => {
+  if (e.target.closest('.nav-links a')) {
+    const navLinks = document.getElementById('navLinks');
+    if (navLinks) navLinks.classList.remove('open');
+  }
 });
 
-// Form submit mock
-function submitForm() {
-alert('Thank you for your message! I will get back to you soon.');
-}
-
-// --- GOOGLE SHEETS FETCH LOGIC ---
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzN-zKOBzw5I96FiPyeiyk_LzM8EN9SkF6wMZYXLl136aXJ_bvmr5yQkiOn8FFgzMIE/exec';
-
+// --- PROJECT FETCHING ---
 async function fetchProjects() {
-const container = document.getElementById('projects-container');
-if (!container) return; // Only run on pages with this container
+  const container = document.getElementById('projects-container');
+  if (!container) return;
 
-try {
-const response = await fetch(SCRIPT_URL);
-const data = await response.json();
-
-if (data.status === 'success') {
-renderProjects(data.data);
-} else {
-container.innerHTML = `<p class="project-placeholder reveal" style="color: red;">Error: ${data.message}</p>`;
-}
-} catch (error) {
-container.innerHTML = `<p class="project-placeholder reveal" style="color: red;">Failed to load projects. Please try again later.</p>`;
-console.error('Error fetching projects:', error);
-}
+  try {
+    const response = await fetch(SCRIPT_URL);
+    const result = await response.json();
+    if (result.status === 'success') {
+      renderProjects(result.data);
+    } else {
+      container.innerHTML = `<p class="project-placeholder reveal" style="color: red;">Error: ${result.message}</p>`;
+    }
+  } catch (err) {
+    container.innerHTML = `<p class="project-placeholder reveal" style="color: red;">Failed to load projects. Please try again later.</p>`;
+    console.error('Error fetching projects:', err);
+  }
 }
 
 function renderMediaIcons(mediaString) {
-if (!mediaString) return '';
-const iconMap = {
-github: 'fab fa-github',
-demo: 'fas fa-external-link-alt',
-youtube: 'fab fa-youtube',
-linkedin: 'fab fa-linkedin',
-website: 'fas fa-globe',
-other: 'fas fa-link'
-};
-
-return mediaString.split('|').map(pair => {
-const index = pair.indexOf(':');
-if (index === -1) return '';
-const type = pair.substring(0, index);
-const url = pair.substring(index + 1);
-const icon = iconMap[type] || iconMap.other;
-return `<a href="${url}" target="_blank" class="media-icon-btn" onclick="event.stopPropagation()"><i class="${icon}"></i></a>`;
-}).join('');
+  if (!mediaString) return '';
+  const iconMap = { 
+    github: 'fab fa-github', 
+    demo: 'fas fa-external-link-alt', 
+    youtube: 'fab fa-youtube', 
+    linkedin: 'fab fa-linkedin', 
+    website: 'fas fa-globe', 
+    other: 'fas fa-link' 
+  };
+  
+  return mediaString.split('|').map(pair => {
+    const [type, url] = pair.split(':');
+    if (!url) return '';
+    const icon = iconMap[type] || iconMap.other;
+    return `<a href="${url}" target="_blank" class="media-icon-btn" onclick="event.stopPropagation()"><i class="${icon}"></i></a>`;
+  }).join('');
 }
 
 function renderProjects(projects) {
-const container = document.getElementById('projects-container');
-container.innerHTML = ''; // Clear loading
+  const container = document.getElementById('projects-container');
+  if (!container) return;
+  container.innerHTML = '';
+  
+  if (!projects || projects.length === 0) {
+    container.innerHTML = `<div class="project-placeholder reveal"><i class="fas fa-folder-open"></i><p>No projects available right now.</p></div>`;
+    return;
+  }
 
-if (!projects || projects.length === 0) {
-container.innerHTML = `<div class="project-placeholder reveal">
-<i class="fas fa-folder-open"></i>
-<p>No projects available right now. Check back soon!</p>
-</div>`;
-return;
-}
+  projects.forEach((proj, i) => {
+    const tagsHtml = (proj.tags || '').split(',').map(t => `<span class="project-tag">${t.trim()}</span>`).join('');
+    const html = `
+      <div class="project-card reveal" onclick="window.location.href='project.html?id=${proj.id}'">
+        <div class="project-img" onclick="event.stopPropagation(); openLightbox('${proj.image_url}')">
+          <span class="project-num">${(i+1).toString().padStart(2,'0')}</span>
+          <img src="${proj.image_url}" alt="${proj.title}" style="width:100%; height:100%; object-fit:cover; position:absolute; inset:0; opacity:0.4;">
+          <i class="fas fa-laptop-code" style="z-index:2"></i>
+        </div>
+        <div class="project-body">
+          <div class="project-tags">${tagsHtml}</div>
+          <h3 class="project-title">${proj.title}</h3>
+          <p class="project-desc">${proj.short_description}</p>
+          <div class="project-media">${renderMediaIcons(proj.media || proj[""])}</div>
+        </div>
+      </div>
+    `;
+    container.innerHTML += html;
+  });
 
-projects.forEach((proj, index) => {
-// Generate tags HTML
-const tagsArray = proj.tags ? proj.tags.split(',').map(t => t.trim()) : [];
-const tagsHtml = tagsArray.map(t => `<span class="project-tag">${t}</span>`).join('');
+  // Reveal animation logic
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 100);
+      }
+    });
+  }, { threshold: 0.1 });
 
-// Default image or icon logic
-let imgContent = '';
-if (proj.image_url) {
-imgContent = `<img src="${proj.image_url}" alt="${proj.title}" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; opacity: 0.3;">`;
-}
-// Always show icon
-imgContent += `<i class="fas fa-laptop-code" style="z-index: 2;"></i>`;
-
-const html = `
-<div class="project-card reveal" style="cursor: pointer;" onclick="window.location.href='project.html?id=${proj.id}'">
-<div class="project-img" onclick="event.stopPropagation(); openLightbox('${proj.image_url}')">
-<span class="project-num">${(index + 1).toString().padStart(2, '0')}</span>
-${imgContent}
-</div>
-<div class="project-body">
-<div class="project-tags">
-${tagsHtml}
-</div>
-<h3 class="project-title">${proj.title}</h3>
-<p class="project-desc">${proj.short_description}</p>
-<div class="project-media">
-${renderMediaIcons(proj.media || proj[""])}
-</div>
-</div>
-</div>
-`;
-container.innerHTML += html;
-});
-
-// Re-run observer for new dynamic elements
-document.querySelectorAll('.project-card').forEach(el => {
-observer.observe(el);
-// Give them a small timeout to animate in after being added
-setTimeout(() => el.classList.add('visible'), 50);
-});
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 }
 
 // --- LIGHTBOX LOGIC ---
 function openLightbox(src) {
+  if (!src) return;
   let lightbox = document.getElementById('lightbox');
   if (!lightbox) {
     lightbox = document.createElement('div');
@@ -150,14 +110,8 @@ function openLightbox(src) {
       </div>
     `;
     document.body.appendChild(lightbox);
-    
-    lightbox.querySelector('.lightbox-close').addEventListener('click', () => {
-      lightbox.classList.remove('active');
-    });
-    
-    lightbox.addEventListener('click', (e) => {
-      if (e.target === lightbox) lightbox.classList.remove('active');
-    });
+    lightbox.querySelector('.lightbox-close').addEventListener('click', () => lightbox.classList.remove('active'));
+    lightbox.addEventListener('click', (e) => { if (e.target === lightbox) lightbox.classList.remove('active'); });
   }
   
   const img = document.getElementById('lightbox-img');
@@ -165,5 +119,14 @@ function openLightbox(src) {
   lightbox.classList.add('active');
 }
 
-// Call on load
-document.addEventListener('DOMContentLoaded', fetchProjects);
+// --- INITIALIZATION ---
+document.addEventListener('DOMContentLoaded', () => {
+  fetchProjects();
+  // Initialize other reveal elements
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+});

@@ -1,170 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Project Details | Boon Shoung</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link rel="stylesheet" href="css/style.css">
-<style>
-  #project-detail { padding-top: 120px; min-height: 100vh; }
-  .back-btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    color: var(--gold); text-decoration: none; font-size: 0.9rem;
-    font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
-    margin-bottom: 2rem; transition: all 0.3s;
-  }
-  .back-btn:hover { color: var(--gold2); transform: translateX(-5px); }
-  
-  .project-header { margin-bottom: 3rem; }
-  .project-header h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 5vw, 4rem);
-    color: var(--white); margin-bottom: 1rem;
-  }
-  .project-meta { display: flex; gap: 2rem; flex-wrap: wrap; margin-bottom: 2rem; }
-  .meta-item { display: flex; flex-direction: column; gap: 5px; }
-  .meta-label { color: var(--gold); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
-  .meta-value { color: var(--light); font-size: 1rem; }
-  
-  .project-banner {
-    width: 100%; height: 400px; border-radius: 12px;
-    background: var(--navy2); display: flex; align-items: center; justify-content: center;
-    overflow: hidden; margin-bottom: 3rem; position: relative;
-    border: 1px solid rgba(201,168,76,0.2);
-  }
-  .project-banner img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
-  .project-banner i { font-size: 5rem; color: rgba(201,168,76,0.2); position: absolute; }
-  
-  .project-content {
-    color: var(--grey); line-height: 1.8; font-size: 1.05rem;
-    max-width: 800px; margin: 0 auto;
-  }
-  .project-content p { margin-bottom: 1.5rem; }
-  
-  /* Loader */
-  #loader { text-align: center; padding: 5rem 0; }
-  #loader i { font-size: 3rem; color: var(--gold); margin-bottom: 1rem; }
-  #loader p { color: var(--grey); }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Details | Boon Shoung</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<nav id="navbar">
-  <div class="nav-logo">BS<span>.</span></div>
-  <ul class="nav-links">
-    <li><a href="index.html">Back to Home</a></li>
-  </ul>
-</nav>
+  <nav id="navbar">
+    <div class="nav-logo">BS<span>.</span></div>
+    <ul class="nav-links">
+      <li><a href="index.html">BACK TO HOME</a></li>
+    </ul>
+  </nav>
 
-<section id="project-detail">
-  <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Portfolio</a>
-  
-  <div id="loader">
-    <i class="fas fa-spinner fa-spin"></i>
-    <p>Loading project details...</p>
-  </div>
+  <section class="project-detail">
+    <div id="project-loader" style="text-align: center; margin: 100px auto;">
+      <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: var(--gold);"></i>
+      <p style="margin-top: 20px; color: var(--gold);">Loading Project Details...</p>
+    </div>
 
-  <div id="project-content-container" style="display: none;">
-    <!-- Filled by JS -->
-  </div>
-</section>
+    <div id="project-detail-container" style="display: none;">
+      <!-- Content will be injected here -->
+    </div>
+  </section>
 
-<footer>
-  <p>Designed & Built by <span>Boon Shoung A/L Kok Hoe</span> &nbsp;·&nbsp; © 2025 All Rights Reserved</p>
-</footer>
+  <footer>
+    <p>&copy; 2024 <span>Boon Shoung</span>. All rights reserved.</p>
+  </footer>
 
-<script src="js/script.js"></script>
-<script>
-  // Page specific logic
-  async function loadProjectDetails() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const projectId = urlParams.get('id');
-    const container = document.getElementById('project-content-container');
-    const loader = document.getElementById('loader');
+  <script src="js/script.js"></script>
+  <script>
+    async function loadProjectDetails() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const projectId = urlParams.get('id');
+      const container = document.getElementById('project-detail-container');
+      const loader = document.getElementById('project-loader');
 
-    if (!projectId) {
-      loader.innerHTML = `<p style="color: red;">No project ID specified.</p>`;
-      return;
-    }
+      if (!projectId) {
+        window.location.href = 'index.html';
+        return;
+      }
 
-    try {
-      // SCRIPT_URL comes from js/script.js
-      const response = await fetch(`${SCRIPT_URL}?id=${projectId}`);
-      const data = await response.json();
+      try {
+        const response = await fetch(`${SCRIPT_URL}?id=${projectId}`);
+        const result = await response.json();
 
-      if (data.status === 'success' && data.data.length > 0) {
-        const proj = data.data[0];
-        
-        const tagsArray = proj.tags ? proj.tags.split(',').map(t => t.trim()) : [];
-        const tagsHtml = tagsArray.map(t => `<span class="project-tag" style="background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.2); padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; color: var(--gold);">${t}</span>`).join(' ');
-
-        // Image Gallery HTML
-        let galleryHtml = '';
-        if (proj.image_url) {
-          galleryHtml += `
-            <div class="gallery-item reveal" onclick="openLightbox('${proj.image_url}')">
-              <img src="${proj.image_url}" alt="Main Project Image">
-            </div>
-          `;
-        }
-        
-        if (proj.additional_images) {
-          const additionalPaths = proj.additional_images.split('|');
-          additionalPaths.forEach(path => {
+        if (result.status === 'success' && result.data.length > 0) {
+          const proj = result.data[0];
+          
+          // Render Gallery
+          let galleryHtml = '';
+          if (proj.image_url) {
             galleryHtml += `
-              <div class="gallery-item reveal" onclick="openLightbox('${path}')">
-                <img src="${path}" alt="Project Gallery Image">
+              <div class="gallery-item reveal" onclick="openLightbox('${proj.image_url}')">
+                <img src="${proj.image_url}" alt="Main Image">
               </div>
             `;
-          });
-        }
+          }
+          if (proj.additional_images) {
+            proj.additional_images.split('|').forEach(path => {
+              galleryHtml += `
+                <div class="gallery-item reveal" onclick="openLightbox('${path}')">
+                  <img src="${path}" alt="Gallery Image">
+                </div>
+              `;
+            });
+          }
 
-        container.innerHTML = `
-          <div class="project-header reveal">
-            <h1>${proj.title}</h1>
-            <div class="project-meta">
-              <div class="meta-item">
-                <span class="meta-label">Role</span>
-                <span class="meta-value">${proj.role || 'Contributor'}</span>
+          container.innerHTML = `
+            <div class="project-header reveal">
+              <h1>${proj.title}</h1>
+              <div class="project-meta">
+                <div class="meta-item">
+                  <span class="meta-label">Role</span>
+                  <span class="meta-value">${proj.role || 'Contributor'}</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Tags</span>
+                  <span class="meta-value">${proj.tags || 'N/A'}</span>
+                </div>
               </div>
-              <div class="meta-item">
-                <span class="meta-label">Tags</span>
-                <span class="meta-value">${proj.tags}</span>
+              <div class="project-media">
+                ${renderMediaIcons(proj.media || proj[""])}
               </div>
             </div>
-            <div class="project-media">
-              ${renderMediaIcons(proj.media || proj[""])}
+            
+            <div class="project-gallery">
+              ${galleryHtml}
             </div>
-          </div>
+
+            <div class="project-content reveal">
+              <p>${(proj.detailed_description || proj.short_description || '').replace(/\n/g, '<br>')}</p>
+            </div>
+          `;
           
-          <div class="project-gallery">
-            ${galleryHtml}
-          </div>
+          loader.style.display = 'none';
+          container.style.display = 'block';
 
-          <div class="project-content reveal">
-            <p>${(proj.detailed_description || proj.short_description).replace(/\n/g, '<br>')}</p>
-          </div>
-        `;
-        
+          // Trigger reveal animations
+          setTimeout(() => {
+            document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+          }, 100);
+        } else {
+          container.innerHTML = '<p style="text-align:center; color:red;">Project not found.</p>';
+          loader.style.display = 'none';
+          container.style.display = 'block';
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        container.innerHTML = '<p style="text-align:center; color:red;">Error loading project details.</p>';
         loader.style.display = 'none';
         container.style.display = 'block';
-
-        // Reveal animation for new elements
-        document.querySelectorAll('.reveal').forEach(el => {
-          setTimeout(() => el.classList.add('visible'), 50);
-        });
-
-      } else {
-        loader.innerHTML = `<p style="color: red;">Project not found.</p>`;
       }
-    } catch (error) {
-      loader.innerHTML = `<p style="color: red;">Error loading project.</p>`;
     }
-  }
 
-  document.addEventListener('DOMContentLoaded', loadProjectDetails);
-</script>
+    document.addEventListener('DOMContentLoaded', loadProjectDetails);
+  </script>
 </body>
 </html>
