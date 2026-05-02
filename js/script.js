@@ -37,3 +37,79 @@
   function submitForm() {
     alert('Thank you for your message! I will get back to you soon.');
   }
+
+  // --- GOOGLE SHEETS FETCH LOGIC ---
+  const SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE'; // Replace with your URL
+
+  async function fetchProjects() {
+    const container = document.getElementById('projects-container');
+    if (!container) return; // Only run on pages with this container
+
+    try {
+      const response = await fetch(SCRIPT_URL);
+      const data = await response.json();
+
+      if (data.status === 'success') {
+        renderProjects(data.data);
+      } else {
+        container.innerHTML = `<p class="project-placeholder reveal" style="color: red;">Error: ${data.message}</p>`;
+      }
+    } catch (error) {
+      container.innerHTML = `<p class="project-placeholder reveal" style="color: red;">Failed to load projects. Please try again later.</p>`;
+      console.error('Error fetching projects:', error);
+    }
+  }
+
+  function renderProjects(projects) {
+    const container = document.getElementById('projects-container');
+    container.innerHTML = ''; // Clear loading
+
+    if (!projects || projects.length === 0) {
+      container.innerHTML = `<div class="project-placeholder reveal">
+        <i class="fas fa-folder-open"></i>
+        <p>No projects available right now. Check back soon!</p>
+      </div>`;
+      return;
+    }
+
+    projects.forEach((proj, index) => {
+      // Generate tags HTML
+      const tagsArray = proj.tags ? proj.tags.split(',').map(t => t.trim()) : [];
+      const tagsHtml = tagsArray.map(t => `<span class="project-tag">${t}</span>`).join('');
+      
+      // Default image or icon logic
+      let imgContent = '';
+      if (proj.image_url) {
+        imgContent = `<img src="${proj.image_url}" alt="${proj.title}" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; opacity: 0.3;">`;
+      }
+      // Always show icon
+      imgContent += `<i class="fas fa-laptop-code" style="z-index: 2;"></i>`;
+
+      const html = `
+        <div class="project-card reveal" style="cursor: pointer;" onclick="window.location.href='project.html?id=${proj.id}'">
+          <div class="project-img">
+            <span class="project-num">${(index + 1).toString().padStart(2, '0')}</span>
+            ${imgContent}
+          </div>
+          <div class="project-body">
+            <div class="project-tags">
+              ${tagsHtml}
+            </div>
+            <h3 class="project-title">${proj.title}</h3>
+            <p class="project-desc">${proj.short_description}</p>
+          </div>
+        </div>
+      `;
+      container.innerHTML += html;
+    });
+
+    // Re-run observer for new dynamic elements
+    document.querySelectorAll('.project-card').forEach(el => {
+      observer.observe(el);
+      // Give them a small timeout to animate in after being added
+      setTimeout(() => el.classList.add('visible'), 50);
+    });
+  }
+
+  // Call on load
+  document.addEventListener('DOMContentLoaded', fetchProjects);
