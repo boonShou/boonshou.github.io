@@ -62,6 +62,25 @@ function renderTable() {
   });
 }
 
+function addMediaRow(type = '', url = '') {
+  const container = document.getElementById('media-links-container');
+  const row = document.createElement('div');
+  row.className = 'media-link-row';
+  row.innerHTML = `
+    <select class="media-type">
+      <option value="github" ${type === 'github' ? 'selected' : ''}>GitHub</option>
+      <option value="demo" ${type === 'demo' ? 'selected' : ''}>Live Demo</option>
+      <option value="youtube" ${type === 'youtube' ? 'selected' : ''}>YouTube</option>
+      <option value="linkedin" ${type === 'linkedin' ? 'selected' : ''}>LinkedIn</option>
+      <option value="website" ${type === 'website' ? 'selected' : ''}>Website</option>
+      <option value="other" ${type === 'other' ? 'selected' : ''}>Other</option>
+    </select>
+    <input type="text" class="media-url" placeholder="https://..." value="${url}">
+    <button type="button" class="remove-link-btn" onclick="this.parentElement.remove()">&times;</button>
+  `;
+  container.appendChild(row);
+}
+
 function openModal() {
   document.getElementById('project-modal').style.display = 'block';
   document.getElementById('modal-title').innerText = 'Add Project';
@@ -72,6 +91,7 @@ function openModal() {
   document.getElementById('proj-detailed').value = '';
   document.getElementById('proj-tags').value = '';
   document.getElementById('proj-image').value = '';
+  document.getElementById('media-links-container').innerHTML = '';
 }
 
 function closeModal() {
@@ -90,6 +110,19 @@ function editProject(id) {
   document.getElementById('proj-detailed').value = proj.detailed_description;
   document.getElementById('proj-tags').value = proj.tags;
   document.getElementById('proj-image').value = proj.image_url;
+
+  // Populate media links
+  if (proj.media) {
+    const pairs = proj.media.split('|');
+    pairs.forEach(pair => {
+      const index = pair.indexOf(':');
+      if (index > -1) {
+        const type = pair.substring(0, index);
+        const url = pair.substring(index + 1);
+        addMediaRow(type, url);
+      }
+    });
+  }
 }
 
 async function saveProject() {
@@ -107,7 +140,12 @@ async function saveProject() {
     short_description: document.getElementById('proj-short').value,
     detailed_description: document.getElementById('proj-detailed').value,
     tags: document.getElementById('proj-tags').value,
-    image_url: document.getElementById('proj-image').value
+    image_url: document.getElementById('proj-image').value,
+    media: Array.from(document.querySelectorAll('.media-link-row')).map(row => {
+      const type = row.querySelector('.media-type').value;
+      const url = row.querySelector('.media-url').value;
+      return url ? `${type}:${url}` : null;
+    }).filter(x => x).join('|')
   };
 
   try {

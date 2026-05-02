@@ -58,6 +58,25 @@
       container.innerHTML = `<p class="project-placeholder reveal" style="color: red;">Failed to load projects. Please try again later.</p>`;
       console.error('Error fetching projects:', error);
     }
+  function renderMediaIcons(mediaString) {
+    if (!mediaString) return '';
+    const iconMap = {
+      github: 'fab fa-github',
+      demo: 'fas fa-external-link-alt',
+      youtube: 'fab fa-youtube',
+      linkedin: 'fab fa-linkedin',
+      website: 'fas fa-globe',
+      other: 'fas fa-link'
+    };
+
+    return mediaString.split('|').map(pair => {
+      const index = pair.indexOf(':');
+      if (index === -1) return '';
+      const type = pair.substring(0, index);
+      const url = pair.substring(index + 1);
+      const icon = iconMap[type] || iconMap.other;
+      return `<a href="${url}" target="_blank" class="media-icon-btn" onclick="event.stopPropagation()"><i class="${icon}"></i></a>`;
+    }).join('');
   }
 
   function renderProjects(projects) {
@@ -97,6 +116,9 @@
             </div>
             <h3 class="project-title">${proj.title}</h3>
             <p class="project-desc">${proj.short_description}</p>
+            <div class="project-media">
+              ${renderMediaIcons(proj.media)}
+            </div>
           </div>
         </div>
       `;

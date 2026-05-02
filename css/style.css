@@ -339,6 +339,32 @@ section { min-height: 100vh; padding: 120px 8% 80px; }
 }
 .project-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--white); margin-bottom: 0.6rem; }
 .project-desc { color: var(--grey); font-size: 0.9rem; line-height: 1.7; }
+.project-media {
+  display: flex;
+  gap: 12px;
+  margin-top: 15px;
+  flex-wrap: wrap;
+}
+.media-icon-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(201, 168, 76, 0.1);
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  transition: all 0.3s;
+  text-decoration: none;
+}
+.media-icon-btn:hover {
+  background: var(--gold);
+  color: var(--navy);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(201, 168, 76, 0.3);
+}
 .project-placeholder {
   border: 2px dashed rgba(201,168,76,0.2);
   background: rgba(201,168,76,0.02);
