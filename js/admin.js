@@ -68,7 +68,7 @@ tbody.appendChild(tr);
 function addImageRow(url = '') {
 const container = document.getElementById('additional-images-container');
 const row = document.createElement('div');
-row.className = 'media-link-row';
+row.className = 'image-link-row';
 row.innerHTML = `
 <input type="text" class="additional-image-url" placeholder="e.g. images/project-gallery1.jpg" value="${url}">
 <button type="button" class="remove-link-btn" onclick="this.parentElement.remove()">&times;</button>
