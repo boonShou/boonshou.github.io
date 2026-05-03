@@ -99,29 +99,35 @@
       </div>
     </div>
     <div class="reveal">
-      <div class="contact-form">
+      <form class="contact-form" id="contactForm">
+        <!-- Web3Forms Access Key -->
+        <input type="hidden" name="access_key" value="c8f8751e-a416-4847-98ba-8cd2fe8c117e">
+        <input type="hidden" name="subject" value="New Portfolio Contact Message">
+        <input type="hidden" name="from_name" value="Boon Shoung Portfolio">
+
         <div class="form-row">
           <div class="form-group">
             <label>Your Name</label>
-            <input type="text" placeholder="e.g. Ahmad Razif">
+            <input type="text" name="name" placeholder="e.g. Ahmad Razif" required>
           </div>
           <div class="form-group">
             <label>Your Email</label>
-            <input type="email" placeholder="email@example.com">
+            <input type="email" name="email" placeholder="email@example.com" required>
           </div>
         </div>
         <div class="form-group">
           <label>Subject</label>
-          <input type="text" placeholder="What is this about?">
+          <input type="text" name="msg_subject" placeholder="What is this about?" required>
         </div>
         <div class="form-group">
           <label>Message</label>
-          <textarea rows="6" placeholder="Write your message here..."></textarea>
+          <textarea name="message" rows="6" placeholder="Write your message here..." required></textarea>
         </div>
-        <button class="btn-submit" onclick="submitForm()">
-          <i class="fas fa-paper-plane"></i> &nbsp; Send Message
+        <div id="formResult" style="margin-bottom: 1rem; font-weight: 500; font-size: 0.9rem; display: none;"></div>
+        <button type="submit" class="btn-submit" id="submitBtn">
+          <i class="fas fa-paper-plane"></i> &nbsp; <span id="btnText">Send Message</span>
         </button>
-      </div>
+      </form>
     </div>
   </div>
 </section>
@@ -132,5 +138,61 @@
 </footer>
 
 <script src="js/script.js"></script>
+<script>
+  const contactForm = document.getElementById('contactForm');
+  const formResult = document.getElementById('formResult');
+  const submitBtn = document.getElementById('submitBtn');
+  const btnText = document.getElementById('btnText');
+
+  contactForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // UI Loading State
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = '0.7';
+    btnText.innerText = 'Sending...';
+    formResult.style.display = 'block';
+    formResult.style.color = '#c9a84c';
+    formResult.innerText = 'Connecting to mail server...';
+
+    const formData = new FormData(contactForm);
+    const object = Object.fromEntries(formData);
+    const json = JSON.stringify(object);
+
+    fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: json
+    })
+    .then(async (response) => {
+      let res = await response.json();
+      if (response.status == 200) {
+        formResult.style.color = '#2ecc71'; // Green for success
+        formResult.innerText = "Success! Your message has been sent.";
+        contactForm.reset();
+      } else {
+        console.log(response);
+        formResult.style.color = '#e74c3c'; // Red for error
+        formResult.innerText = res.message;
+      }
+    })
+    .catch(error => {
+      console.log(error);
+      formResult.style.color = '#e74c3c';
+      formResult.innerText = "Something went wrong! Please try again.";
+    })
+    .then(function() {
+      submitBtn.disabled = false;
+      submitBtn.style.opacity = '1';
+      btnText.innerText = 'Send Message';
+      setTimeout(() => {
+        formResult.style.display = 'none';
+      }, 5000);
+    });
+  });
+</script>
 </body>
 </html>
