@@ -249,7 +249,15 @@ nav {
 @media print {
   nav, .cv-controls, footer { display: none !important; }
   .cv-page-wrapper { padding: 0; margin: 0; max-width: 100%; }
-  #cv-document { box-shadow: none; padding: 0; }
+  #cv-document { 
+    box-shadow: none; 
+    padding: 0;
+    width: 100%;
+  }
+  .cv-section, .edu-item, .project-item, .skill-cat {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
 }
 </style>
 </head>
@@ -372,6 +380,19 @@ nav {
     <section class="cv-section">
       <h2 class="cv-section-title"><i class="fas fa-project-diagram"></i> Key Projects</h2>
       <div class="cv-content">
+        <!-- Project 1 -->
+        <div class="project-item">
+          <div class="project-head">Text-to-Speech (TTS) Web Application</div>
+          <div class="project-tech">Python, Flask, HTML, NLP (Natural Language Processing)</div>
+          <ul class="project-list">
+            <li>Developed a functional web-based TTS system as part of the Natural Language Processing (NLP) course.</li>
+            <li>Implemented speech synthesis logic using Python to convert textual input into clear, audible speech.</li>
+            <li>Designed a clean and intuitive user interface to enhance accessibility and user experience.</li>
+            <li>Managed project development within a structured academic timeline, meeting all technical specifications.</li>
+          </ul>
+        </div>
+        
+        <!-- Project 2 -->
         <div class="project-item">
           <div class="project-head">Personal Digital Portfolio Website</div>
           <div class="project-tech">HTML, CSS, JavaScript, Google Sheets, Google Apps Script, GitHub Pages</div>
@@ -434,11 +455,12 @@ function toggleNav() {
 function downloadCV() {
   const element = document.getElementById('cv-document');
   const opt = {
-    margin: [0, 0, 0, 0],
+    margin: [0.5, 0.5, 0.5, 0.5],
     filename: 'BoonShoung_CV.pdf',
     image: { type: 'jpeg', quality: 0.98 },
     html2canvas: { scale: 2, useCORS: true, letterRendering: true },
-    jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+    jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
   };
 
   // Temporarily style for PDF generation if needed
