@@ -262,6 +262,28 @@ section { min-height: 100vh; padding: 120px 8% 80px; }
   color: var(--gold); font-size: 1.2rem;
 }
 
+.edu-map-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: rgba(201, 168, 76, 0.1);
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  border-radius: 6px;
+  color: var(--gold);
+  font-size: 0.8rem;
+  margin-left: 10px;
+  transition: all 0.3s;
+  vertical-align: middle;
+}
+.edu-map-btn:hover {
+  background: var(--gold);
+  color: var(--navy);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(201, 168, 76, 0.3);
+}
+
 /* ── SKILLS ── */
 #skills { background: var(--navy2); }
 .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
