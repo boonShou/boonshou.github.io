@@ -1,7 +1,6 @@
 // --- ADMIN LOGIC ---
-if (typeof SCRIPT_URL === 'undefined') {
-  var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzN-zKOBzw5I96FiPyeiyk_LzM8EN9SkF6wMZYXLl136aXJ_bvmr5yQkiOn8FFgzMIE/exec';
-}
+// (SCRIPT_URL is already defined in script.js)
+
 
 let adminPassword = '';
 let currentProjects = [];
