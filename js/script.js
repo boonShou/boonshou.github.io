@@ -42,6 +42,7 @@ function renderMediaIcons(mediaString) {
     youtube: 'fab fa-youtube', 
     linkedin: 'fab fa-linkedin', 
     website: 'fas fa-globe', 
+    pdf: 'fas fa-file-pdf',
     other: 'fas fa-link' 
   };
   

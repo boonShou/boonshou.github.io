@@ -74,6 +74,7 @@ function addMediaRow(type = 'github', url = '') {
       <option value="youtube" ${type === 'youtube' ? 'selected' : ''}>YouTube</option>
       <option value="linkedin" ${type === 'linkedin' ? 'selected' : ''}>LinkedIn</option>
       <option value="website" ${type === 'website' ? 'selected' : ''}>Website</option>
+      <option value="pdf" ${type === 'pdf' ? 'selected' : ''}>PDF Document</option>
       <option value="other" ${type === 'other' ? 'selected' : ''}>Other</option>
     </select>
     <input type="text" class="m-url" placeholder="https://..." value="${url}">
