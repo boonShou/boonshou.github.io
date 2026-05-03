@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CV | Boon Shoung Portfolio</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<!-- html2pdf.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<style>
+:root {
+  --navy: #0a1628;
+  --navy2: #112240;
+  --navy3: #1a3a5c;
+  --gold: #c9a84c;
+  --gold2: #e8c56d;
+  --white: #f0f4ff;
+  --grey: #8892a4;
+  --light: #ccd6f6;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--navy);
+  color: var(--light);
+  font-family: 'DM Sans', sans-serif;
+  line-height: 1.6;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; width: 100%; z-index: 999;
+  background: rgba(10,22,40,0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(201,168,76,0.2);
+  padding: 0 5%;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 70px;
+}
+.nav-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem; font-weight: 700;
+  color: var(--gold);
+}
+.nav-logo span { color: var(--white); }
+.nav-links { display: flex; gap: 1.5rem; list-style: none; }
+.nav-links a {
+  color: var(--grey); text-decoration: none;
+  font-size: 0.8rem; font-weight: 500; letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: color 0.3s;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--gold); }
+
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+.hamburger span { width: 24px; height: 2px; background: var(--gold); }
+
+/* ── CV CONTAINER ── */
+.cv-page-wrapper {
+  padding: 100px 5% 50px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.cv-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.btn-back {
+  color: var(--grey);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  transition: color 0.3s;
+}
+.btn-back:hover { color: var(--gold); }
+
+.btn-download {
+  background: var(--gold);
+  color: var(--navy);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s;
+}
+.btn-download:hover { background: var(--gold2); transform: translateY(-2px); }
+
+/* ── THE CV DOCUMENT ── */
+#cv-document {
+  background: white;
+  color: #333;
+  padding: 40px;
+  border-radius: 4px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  min-height: 1120px; /* Standard A4 ratio */
+}
+
+.cv-header {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--navy);
+  padding-bottom: 20px;
+  margin-bottom: 25px;
+}
+
+.cv-header-left h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  color: var(--navy);
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.cv-header-left .degree {
+  color: var(--gold);
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+}
+
+.contact-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 20px;
+  font-size: 0.85rem;
+}
+
+.contact-info div { display: flex; align-items: center; gap: 8px; }
+.contact-info i { color: var(--navy); width: 14px; }
+
+.cv-photo-wrap {
+  width: 120px;
+  height: 150px;
+  border: 3px solid var(--navy);
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.cv-photo-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cv-photo-wrap i {
+  font-size: 4rem;
+  color: #ccc;
+}
+
+.cv-section {
+  margin-bottom: 20px;
+}
+
+.cv-section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--navy);
+  text-transform: uppercase;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cv-section-title i { color: var(--gold); font-size: 0.9rem; }
+
+.cv-content { font-size: 0.9rem; }
+
+.objective p { text-align: justify; color: #555; }
+
+.edu-item { margin-bottom: 10px; }
+.edu-head { display: flex; justify-content: space-between; font-weight: 700; }
+.edu-school { color: var(--navy); }
+.edu-year { color: var(--gold); }
+.edu-degree { font-style: italic; color: #666; font-size: 0.85rem; }
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 30px;
+}
+.skill-cat { margin-bottom: 8px; }
+.skill-cat strong { color: var(--navy); font-size: 0.85rem; display: block; margin-bottom: 2px; }
+.skill-cat span { font-size: 0.8rem; color: #555; }
+
+.project-item { margin-bottom: 15px; }
+.project-head { font-weight: 700; color: var(--navy); }
+.project-tech { color: var(--gold); font-size: 0.8rem; margin-bottom: 5px; }
+.project-list { padding-left: 18px; font-size: 0.85rem; color: #555; }
+.project-list li { margin-bottom: 3px; }
+
+.qualities-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  list-style: none;
+}
+.qualities-list li {
+  font-size: 0.85rem;
+  color: #555;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.qualities-list li::before {
+  content: '✔';
+  color: var(--gold);
+  font-weight: bold;
+}
+
+.lang-list {
+  display: flex;
+  gap: 30px;
+}
+.lang-item strong { color: var(--navy); }
+
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  #cv-document { padding: 25px; }
+  .cv-header { flex-direction: column-reverse; gap: 20px; align-items: center; text-align: center; }
+  .contact-info { grid-template-columns: 1fr; text-align: left; }
+  .cv-photo-wrap { margin-bottom: 10px; }
+  .skills-grid { grid-template-columns: 1fr; }
+}
+
+/* Print specific styles to ensure PDF looks perfect */
+@media print {
+  nav, .cv-controls, footer { display: none !important; }
+  .cv-page-wrapper { padding: 0; margin: 0; max-width: 100%; }
+  #cv-document { box-shadow: none; padding: 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo">BS<span>.</span></div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="education.html">Education</a></li>
+    <li><a href="skills.html">Skills</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href="qualities.html">Qualities</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="cv.html" class="active">CV</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleNav()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="cv-page-wrapper">
+  <div class="cv-controls">
+    <a href="index.html" class="btn-back">
+      <i class="fas fa-arrow-left"></i> Back to Portfolio
+    </a>
+    <button class="btn-download" onclick="downloadCV()">
+      <i class="fas fa-file-pdf"></i> Download as PDF
+    </button>
+  </div>
+
+  <div id="cv-document">
+    <!-- Header -->
+    <header class="cv-header">
+      <div class="cv-header-left">
+        <h1>Boon Shoung A/L Kok Hoe</h1>
+        <p class="degree">Bachelor of Computer Science (Artificial Intelligence)</p>
+        <div class="contact-info">
+          <div><i class="fas fa-envelope"></i> kolssk18f026@gmail.com</div>
+          <div><i class="fas fa-phone"></i> 01133230751</div>
+          <div><i class="fas fa-map-marker-alt"></i> Jitra, Kedah, Malaysia</div>
+          <div><i class="fab fa-linkedin"></i> linkedin.com/in/boon-shoung-77222b172</div>
+          <div><i class="fas fa-globe"></i> boonshou.github.io</div>
+        </div>
+      </div>
+      <div class="cv-header-right">
+        <div class="cv-photo-wrap">
+          <img src="images/profile.jpg" alt="Profile Photo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+          <i class="fas fa-user-circle" style="display:none;"></i>
+        </div>
+      </div>
+    </header>
+
+    <!-- Objective -->
+    <section class="cv-section objective">
+      <h2 class="cv-section-title"><i class="fas fa-bullseye"></i> Internship Objective</h2>
+      <div class="cv-content">
+        <p>A highly motivated Computer Science student specializing in Artificial Intelligence, seeking an internship opportunity to apply my technical skills in software development, web applications, and AI. Dedicated to building intelligent solutions and meaningful digital experiences while contributing to innovative projects and learning from industry professionals.</p>
+      </div>
+    </section>
+
+    <!-- Education -->
+    <section class="cv-section">
+      <h2 class="cv-section-title"><i class="fas fa-graduation-cap"></i> Education</h2>
+      <div class="cv-content">
+        <div class="edu-item">
+          <div class="edu-head">
+            <span class="edu-school">Universiti Teknikal Malaysia Melaka (UTeM)</span>
+            <span class="edu-year">2024 — Present</span>
+          </div>
+          <div class="edu-degree">Bachelor of Computer Science (Artificial Intelligence)</div>
+        </div>
+        <div class="edu-item">
+          <div class="edu-head">
+            <span class="edu-school">Politeknik Sultan Abdul Halim Mu'adzam Shah (Polimas)</span>
+            <span class="edu-year">Dec 2020 — Sep 2024</span>
+          </div>
+          <div class="edu-degree">Teknologi Maklumat (Digital) — Diploma</div>
+        </div>
+        <div class="edu-item">
+          <div class="edu-head">
+            <span class="edu-school">Kolej Komuniti Bandar Darul Aman</span>
+            <span class="edu-year">Jan 2018 — Apr 2020</span>
+          </div>
+          <div class="edu-degree">Teknologi Maklumat — Sijil</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technical Skills -->
+    <section class="cv-section">
+      <h2 class="cv-section-title"><i class="fas fa-tools"></i> Technical Skills</h2>
+      <div class="cv-content skills-grid">
+        <div class="skill-cat">
+          <strong>Programming</strong>
+          <span>Python, Java, C++, C#, JavaScript, HTML/CSS, JSON, ASP</span>
+        </div>
+        <div class="skill-cat">
+          <strong>Web Development</strong>
+          <span>Flask, Web Application, REST API, HTML5, CSS3</span>
+        </div>
+        <div class="skill-cat">
+          <strong>Database</strong>
+          <span>MySQL, SQL, Google Sheets, Firebase, phpMyAdmin</span>
+        </div>
+        <div class="skill-cat">
+          <strong>AI Tools</strong>
+          <span>DeepSeek, Claude AI, Gemini, GitHub Copilot, Machine Learning, MATLAB, Anaconda</span>
+        </div>
+        <div class="skill-cat">
+          <strong>Development Tools</strong>
+          <span>VS Code, Microsoft Visual Studio, Git & GitHub, Antigravity, Microsoft Office</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects -->
+    <section class="cv-section">
+      <h2 class="cv-section-title"><i class="fas fa-project-diagram"></i> Key Projects</h2>
+      <div class="cv-content">
+        <div class="project-item">
+          <div class="project-head">Personal Digital Portfolio Website</div>
+          <div class="project-tech">HTML, CSS, JavaScript, Google Sheets, Google Apps Script, GitHub Pages</div>
+          <ul class="project-list">
+            <li>Developed a professional multi-page portfolio website showcasing academic history, skills, and projects.</li>
+            <li>Implemented a dynamic projects section powered by a Google Sheets database for real-time updates.</li>
+            <li>Built a password-protected custom Admin Panel for seamless content management without direct code editing.</li>
+            <li>Applied Human-Computer Interaction (HCI) principles to ensure accessibility, responsiveness, and premium UX.</li>
+            <li>Integrated advanced features like automated CV-to-PDF conversion and reveal animations for enhanced interactivity.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Personal Qualities -->
+    <section class="cv-section">
+      <h2 class="cv-section-title"><i class="fas fa-star"></i> Personal Qualities</h2>
+      <div class="cv-content">
+        <ul class="qualities-list">
+          <li>Creative Thinker</li>
+          <li>Team Player</li>
+          <li>Dedicated</li>
+          <li>Continuous Learner</li>
+          <li>Good Communicator</li>
+          <li>Goal-Oriented</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Languages -->
+    <section class="cv-section">
+      <h2 class="cv-section-title"><i class="fas fa-language"></i> Languages</h2>
+      <div class="cv-content lang-list">
+        <div class="lang-item"><strong>Bahasa Malaysia:</strong> Native</div>
+        <div class="lang-item"><strong>English:</strong> Proficient</div>
+        <div class="lang-item"><strong>Mandarin:</strong> Conversational</div>
+      </div>
+    </section>
+
+    <!-- References -->
+    <section class="cv-section">
+      <h2 class="cv-section-title"><i class="fas fa-user-check"></i> References</h2>
+      <div class="cv-content">
+        <p style="color: #666; font-style: italic;">Available upon request</p>
+      </div>
+    </section>
+  </div>
+</div>
+
+<footer style="text-align: center; padding: 2rem; color: var(--grey); font-size: 0.8rem;">
+  <p>© 2025 Boon Shoung A/L Kok Hoe. All Rights Reserved.</p>
+</footer>
+
+<script>
+function toggleNav() {
+  const navLinks = document.getElementById('navLinks');
+  if (navLinks) navLinks.classList.toggle('open');
+}
+
+function downloadCV() {
+  const element = document.getElementById('cv-document');
+  const opt = {
+    margin: [0, 0, 0, 0],
+    filename: 'BoonShoung_CV.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+    jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+  };
+
+  // Temporarily style for PDF generation if needed
+  // Then run html2pdf
+  html2pdf().set(opt).from(element).save();
+}
+</script>
+</body>
+</html>
