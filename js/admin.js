@@ -125,8 +125,12 @@ function editProject(id) {
 
   if (proj.media) {
     proj.media.split('|').forEach(pair => {
-      const [t, u] = pair.split(':');
-      if (u) addMediaRow(t, u);
+      const firstColonIndex = pair.indexOf(':');
+      if (firstColonIndex !== -1) {
+        const t = pair.substring(0, firstColonIndex);
+        const u = pair.substring(firstColonIndex + 1);
+        addMediaRow(t, u);
+      }
     });
   }
   if (proj.additional_images) {

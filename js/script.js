@@ -47,7 +47,10 @@ function renderMediaIcons(mediaString) {
   };
   
   return mediaString.split('|').map(pair => {
-    const [type, url] = pair.split(':');
+    const firstColonIndex = pair.indexOf(':');
+    if (firstColonIndex === -1) return '';
+    const type = pair.substring(0, firstColonIndex);
+    const url = pair.substring(firstColonIndex + 1);
     if (!url) return '';
     const icon = iconMap[type] || iconMap.other;
     return `<a href="${url}" target="_blank" class="media-icon-btn" onclick="event.stopPropagation()"><i class="${icon}"></i></a>`;
