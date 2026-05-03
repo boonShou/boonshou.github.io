@@ -1,6 +1,5 @@
 // --- ADMIN LOGIC ---
-// (SCRIPT_URL is already defined in script.js)
-
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzN-zKOBzw5I96FiPyeiyk_LzM8EN9SkF6wMZYXLl136aXJ_bvmr5yQkiOn8FFgzMIE/exec';
 
 let adminPassword = '';
 let currentProjects = [];
@@ -67,7 +66,7 @@ function addMediaRow(type = 'github', url = '') {
   const container = document.getElementById('media-links-container');
   if (!container) return;
   const div = document.createElement('div');
-  div.className = 'media-row'; // Unique class
+  div.className = 'media-row';
   div.innerHTML = `
     <select class="m-type">
       <option value="github" ${type === 'github' ? 'selected' : ''}>GitHub</option>
@@ -87,7 +86,7 @@ function addImageRow(url = '') {
   const container = document.getElementById('gallery-container');
   if (!container) return;
   const div = document.createElement('div');
-  div.className = 'image-row'; // Unique class
+  div.className = 'image-row';
   div.innerHTML = `
     <input type="text" class="g-url" placeholder="images/project-gallery1.jpg" value="${url}">
     <button type="button" class="remove-btn" onclick="this.parentElement.remove()">&times;</button>
@@ -123,14 +122,12 @@ function editProject(id) {
   document.getElementById('proj-tags').value = proj.tags;
   document.getElementById('proj-image').value = proj.image_url;
 
-  // Populate media
   if (proj.media) {
     proj.media.split('|').forEach(pair => {
       const [t, u] = pair.split(':');
       if (u) addMediaRow(t, u);
     });
   }
-  // Populate gallery
   if (proj.additional_images) {
     proj.additional_images.split('|').forEach(url => addImageRow(url));
   }
@@ -199,4 +196,10 @@ async function deleteProject(id) {
   } catch (err) {
     alert("Failed to delete.");
   }
+}
+
+// Hamburger Toggle for Admin
+function toggleNav() {
+  const navLinks = document.getElementById('navLinks');
+  if (navLinks) navLinks.classList.toggle('open');
 }
