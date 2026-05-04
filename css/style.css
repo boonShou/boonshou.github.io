@@ -688,7 +688,35 @@ footer span { color: var(--gold); }
   transform: scale(0.9);
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
+/* Experience Gallery */
+.experience-gallery {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
 
+.gallery-thumb {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.gallery-thumb:hover {
+  border-color: var(--gold);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(201, 168, 76, 0.2);
+}
+
+.gallery-item-link {
+  flex: 1;
+  min-width: 120px;
+  text-decoration: none;
+}
 .lightbox.active .lightbox-content {
   transform: scale(1);
 }
