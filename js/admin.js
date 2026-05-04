@@ -62,7 +62,7 @@ function renderAdminTable() {
 }
 
 // --- MODAL HELPERS ---
-function addMediaRow(type = 'github', url = '') {
+function addMediaRow(type = 'github', url = '', poster = '') {
   const container = document.getElementById('media-links-container');
   if (!container) return;
   const div = document.createElement('div');
@@ -75,9 +75,11 @@ function addMediaRow(type = 'github', url = '') {
       <option value="linkedin" ${type === 'linkedin' ? 'selected' : ''}>LinkedIn</option>
       <option value="website" ${type === 'website' ? 'selected' : ''}>Website</option>
       <option value="pdf" ${type === 'pdf' ? 'selected' : ''}>PDF Document</option>
+      <option value="poster" ${type === 'poster' ? 'selected' : ''}>Poster (PDF/Image)</option>
       <option value="other" ${type === 'other' ? 'selected' : ''}>Other</option>
     </select>
-    <input type="text" class="m-url" placeholder="https://..." value="${url}">
+    <input type="text" class="m-url" placeholder="Link URL (https://...)" value="${url}">
+    <input type="text" class="m-poster" placeholder="Poster Image URL (Optional)" value="${poster}">
     <button type="button" class="remove-btn" onclick="this.parentElement.remove()">&times;</button>
   `;
   container.appendChild(div);
@@ -125,11 +127,16 @@ function editProject(id) {
 
   if (proj.media) {
     proj.media.split('|').forEach(pair => {
-      const firstColonIndex = pair.indexOf(':');
-      if (firstColonIndex !== -1) {
-        const t = pair.substring(0, firstColonIndex);
-        const u = pair.substring(firstColonIndex + 1);
-        addMediaRow(t, u);
+      if (pair.includes(':::')) {
+        const parts = pair.split(':::');
+        addMediaRow(parts[0], parts[1], parts[2] || '');
+      } else {
+        const firstColonIndex = pair.indexOf(':');
+        if (firstColonIndex !== -1) {
+          const t = pair.substring(0, firstColonIndex);
+          const u = pair.substring(firstColonIndex + 1);
+          addMediaRow(t, u);
+        }
       }
     });
   }
@@ -158,7 +165,8 @@ async function saveProject() {
     media: Array.from(document.querySelectorAll('.media-row')).map(r => {
       const t = r.querySelector('.m-type').value;
       const u = r.querySelector('.m-url').value;
-      return u ? `${t}:${u}` : null;
+      const p = r.querySelector('.m-poster').value;
+      return u ? `${t}:::${u}:::${p}` : null;
     }).filter(x => x).join('|'),
     additional_images: Array.from(document.querySelectorAll('.g-url')).map(i => i.value).filter(x => x).join('|')
   };

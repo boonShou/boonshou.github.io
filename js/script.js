@@ -43,17 +43,35 @@ function renderMediaIcons(mediaString) {
     linkedin: 'fab fa-linkedin', 
     website: 'fas fa-globe', 
     pdf: 'fas fa-file-pdf',
+    poster: 'fas fa-image',
     other: 'fas fa-link' 
   };
   
   return mediaString.split('|').map(pair => {
-    const firstColonIndex = pair.indexOf(':');
-    if (firstColonIndex === -1) return '';
-    const type = pair.substring(0, firstColonIndex);
-    const url = pair.substring(firstColonIndex + 1);
+    let type, url, poster = '';
+    if (pair.includes(':::')) {
+      const parts = pair.split(':::');
+      type = parts[0];
+      url = parts[1];
+      poster = parts[2] || '';
+    } else {
+      const firstColonIndex = pair.indexOf(':');
+      if (firstColonIndex === -1) return '';
+      type = pair.substring(0, firstColonIndex);
+      url = pair.substring(firstColonIndex + 1);
+    }
+    
     if (!url) return '';
     const icon = iconMap[type] || iconMap.other;
-    return `<a href="${url}" target="_blank" class="media-icon-btn" onclick="event.stopPropagation()"><i class="${icon}"></i></a>`;
+    
+    if (poster) {
+      return `
+        <a href="${url}" target="_blank" class="media-icon-btn has-poster" onclick="event.stopPropagation()" title="${type.toUpperCase()}">
+          <img src="${poster}" alt="${type}" class="poster-img">
+          <i class="${icon}"></i>
+        </a>`;
+    }
+    return `<a href="${url}" target="_blank" class="media-icon-btn" onclick="event.stopPropagation()" title="${type.toUpperCase()}"><i class="${icon}"></i></a>`;
   }).join('');
 }
 
