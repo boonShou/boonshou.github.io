@@ -1,5 +1,6 @@
 // --- CONFIGURATION (Obfuscated) ---
-const _u = 'aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J6Ti16S09Cenc1STk2RmlQeWVpeWtfTHpNOEVOOVNrRjZ3TVpZWExsMTM2YVhKX2J2bXI1eVFraU9uOEZGZ3pNSUUvZXhlYw==';
+const _u = 'aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J5RENzbWR4eDJ3bmdubk93MmZ0aExrakpKb1NJRFVmNmUxOWFSZGZ1QnMtd0Z1SDJraXBZN19XVmt2RnJPRENXRzMvZXhlYw==';
+const _k = 'Qm9vblNob3VfUG9ydGZvbGlvX0FjY2Vzc18yMDI2';
 const SCRIPT_URL = atob(_u);
 
 // --- UI HELPERS ---
@@ -22,7 +23,7 @@ async function fetchProjects() {
   if (!container) return;
 
   try {
-    const response = await fetch(SCRIPT_URL);
+    const response = await fetch(`${SCRIPT_URL}?key=${atob(_k)}`);
     const result = await response.json();
     if (result.status === 'success') {
       renderProjects(result.data);
