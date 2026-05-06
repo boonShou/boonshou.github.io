@@ -1,9 +1,28 @@
 // --- CONFIGURATION (Obfuscated) ---
 const _u = 'aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J5RENzbWR4eDJ3bmdubk93MmZ0aExrakpKb1NJRFVmNmUxOWFSZGZ1QnMtd0Z1SDJraXBZN19XVmt2RnJPRENXRzMvZXhlYw==';
 const _k = 'Qm9vblNob3VfUG9ydGZvbGlvX0FjY2Vzc18yMDI2';
+const _e = 'a29sc3NrMThmMDI2QGdtYWlsLmNvbQ==';
+const _p = 'MDExMzMyMzA3NTE=';
 const SCRIPT_URL = atob(_u);
 
 // --- UI HELPERS ---
+function injectProtectedInfo() {
+  const email = atob(_e);
+  const phone = atob(_p);
+  
+  // Update all email displays
+  document.querySelectorAll('.p-email').forEach(el => {
+    if (el.tagName === 'A') el.href = `mailto:${email}`;
+    el.innerText = email;
+  });
+  
+  // Update all phone displays
+  document.querySelectorAll('.p-phone').forEach(el => {
+    if (el.tagName === 'A') el.href = `tel:${phone}`;
+    el.innerText = phone;
+  });
+}
+
 function toggleNav() {
   const navLinks = document.getElementById('navLinks');
   if (navLinks) navLinks.classList.toggle('open');
@@ -145,6 +164,7 @@ function openLightbox(src) {
 
 // --- INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', () => {
+  injectProtectedInfo();
   fetchProjects();
   // Initialize other reveal elements
   const observer = new IntersectionObserver((entries) => {
