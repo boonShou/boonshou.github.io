@@ -1,5 +1,6 @@
-// --- CONFIGURATION ---
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzN-zKOBzw5I96FiPyeiyk_LzM8EN9SkF6wMZYXLl136aXJ_bvmr5yQkiOn8FFgzMIE/exec';
+// --- CONFIGURATION (Obfuscated) ---
+const _u = 'aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J6Ti16S09Cenc1STk2RmlQeWVpeWtfTHpNOEVOOVNrRjZ3TVpZWExsMTM2YVhKX2J2bXI1eVFraU9uOEZGZ3pNSUUvZXhlYw==';
+const SCRIPT_URL = atob(_u);
 
 // --- UI HELPERS ---
 function toggleNav() {
