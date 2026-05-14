@@ -656,6 +656,19 @@ footer span { color: var(--gold); }
     margin: 0 auto; 
     min-height: 336px; /* 280 * 1.2 */
   }
+  .about-info { text-align: center; }
+  .about-details { text-align: left; margin-bottom: 2rem; }
+  .about-info .btn-flex { 
+    width: 100%; 
+    justify-content: center; 
+    box-sizing: border-box; 
+    margin-bottom: 1.5rem;
+  }
+  .about-socials { 
+    justify-content: center; 
+    flex-wrap: wrap; 
+    gap: 1rem; 
+  }
   .reveal { opacity: 1 !important; transform: none !important; }
   .stagger-reveal > * { opacity: 1 !important; transform: none !important; }
   .nav-links { 
