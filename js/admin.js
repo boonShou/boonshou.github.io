@@ -33,9 +33,14 @@ function logout() {
 async function loadAdminProjects(isAutoSync = false) {
   const loader = document.getElementById('admin-loader');
   const table = document.getElementById('projects-table');
+  const syncBadge = document.getElementById('sync-badge');
   
   if (!isAutoSync && loader) loader.style.display = 'block';
   if (!isAutoSync && table) table.style.display = 'none';
+  if (syncBadge) {
+    syncBadge.classList.add('syncing');
+    syncBadge.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> Syncing...';
+  }
 
   try {
     const response = await fetch(`${SCRIPT_URL}?key=${atob(_k)}`);
@@ -46,16 +51,38 @@ async function loadAdminProjects(isAutoSync = false) {
         lastAdminSync = dataString;
         currentProjects = result.data;
         renderAdminTable();
+        updateAdminStats();
         console.log('Admin data synchronized.');
+      }
+      if (syncBadge) {
+        syncBadge.classList.remove('syncing');
+        syncBadge.innerHTML = '<i class="fas fa-check-circle"></i> Live Sync';
       }
     } else if (!isAutoSync) {
       alert("Error: " + result.message);
     }
   } catch (err) {
     if (!isAutoSync) alert("Failed to fetch projects. Check your connection.");
+    if (syncBadge) {
+      syncBadge.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Offline';
+      syncBadge.style.color = '#ff4d4d';
+    }
   } finally {
     if (loader) loader.style.display = 'none';
     if (table) table.style.display = 'table';
+  }
+}
+
+function updateAdminStats() {
+  const totalProjEl = document.getElementById('stat-total-projects');
+  const totalTagsEl = document.getElementById('stat-total-tags');
+  
+  if (totalProjEl) totalProjEl.innerText = currentProjects.length;
+  
+  if (totalTagsEl) {
+    const allTags = currentProjects.flatMap(p => (p.tags || '').split(',').map(t => t.trim().toLowerCase())).filter(t => t);
+    const uniqueTags = new Set(allTags);
+    totalTagsEl.innerText = uniqueTags.size;
   }
 }
 

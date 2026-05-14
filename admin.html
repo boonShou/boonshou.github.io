@@ -23,7 +23,7 @@
   <div class="nav-logo">BS<span>.</span> Admin</div>
   <ul class="nav-links">
     <li><a href="index.html" target="_blank">View Live Site</a></li>
-    <li><a href="#" id="logout-btn" style="display:none;" onclick="logout()">Logout</a></li>
+    <li><a href="#" id="logout-btn" class="hidden" onclick="logout()">Logout</a></li>
   </ul>
 </nav>
 
@@ -36,18 +36,42 @@
   </div>
 </section>
 
-<section id="admin-dashboard" class="admin-section" style="display: none;">
+<section id="admin-dashboard" class="admin-section hidden">
+  <div class="admin-stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon"><i class="fas fa-project-diagram"></i></div>
+      <div class="stat-info">
+        <h3 id="stat-total-projects">0</h3>
+        <p>Total Projects</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><i class="fas fa-tags"></i></div>
+      <div class="stat-info">
+        <h3 id="stat-total-tags">0</h3>
+        <p>Tech Stack Tags</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+      <div class="stat-info">
+        <div id="sync-badge" class="status-badge"><i class="fas fa-circle"></i> Live Sync</div>
+        <p>System Status</p>
+      </div>
+    </div>
+  </div>
+
   <div class="dashboard-header">
     <h2>Manage Projects</h2>
     <button class="btn-primary" onclick="openModal()"><i class="fas fa-plus"></i> Add New Project</button>
   </div>
   
-  <div id="admin-loader" style="text-align: center; margin: 2rem 0; display: none;">
-    <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--gold);"></i>
+  <div id="admin-loader" class="loader-wrap hidden">
+    <i class="fas fa-spinner fa-spin loader-icon"></i>
     <p>Loading projects...</p>
   </div>
 
-  <table class="projects-table" id="projects-table" style="display: none;">
+  <table class="projects-table hidden" id="projects-table">
     <thead>
       <tr>
         <th>ID</th>
@@ -68,32 +92,32 @@
       <input type="hidden" id="proj-id">
       
       <div class="form-group">
-        <label>Title</label>
+        <label for="proj-title">Title</label>
         <input type="text" id="proj-title" placeholder="Project Title" required>
       </div>
       
       <div class="form-group">
-        <label>Role</label>
+        <label for="proj-role">Role</label>
         <input type="text" id="proj-role" placeholder="e.g. Lead Developer">
       </div>
 
       <div class="form-group">
-        <label>Short Description</label>
+        <label for="proj-short">Short Description</label>
         <textarea id="proj-short" rows="2" required></textarea>
       </div>
 
       <div class="form-group">
-        <label>Detailed Description</label>
+        <label for="proj-detailed">Detailed Description</label>
         <textarea id="proj-detailed" rows="5"></textarea>
       </div>
 
       <div class="form-group">
-        <label>Tags (Comma separated)</label>
+        <label for="proj-tags">Tags (Comma separated)</label>
         <input type="text" id="proj-tags" placeholder="e.g. Python, AI, Web">
       </div>
 
       <div class="form-group">
-        <label>Main Image Path</label>
+        <label for="proj-image">Main Image Path</label>
         <input type="text" id="proj-image" placeholder="e.g. images/project1.jpg">
       </div>
 
@@ -109,7 +133,7 @@
         <button type="button" class="add-btn" onclick="addMediaRow()"><i class="fas fa-link"></i> Add Media Link</button>
       </div>
 
-      <button type="submit" class="btn-primary" id="save-btn" style="width: 100%; margin-top: 1rem;">Save Project</button>
+      <button type="submit" class="btn-primary full-width mt-1" id="save-btn">Save Project</button>
     </form>
   </div>
 </div>
