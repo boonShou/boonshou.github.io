@@ -13,13 +13,14 @@ function injectProtectedInfo() {
   // Update all email displays
   document.querySelectorAll('.p-email').forEach(el => {
     if (el.tagName === 'A') el.href = `mailto:${email}`;
-    el.innerText = email;
+    // Only update text if the element is empty/simple text to avoid wiping icons
+    if (el.children.length === 0) el.innerText = email;
   });
   
   // Update all phone displays
   document.querySelectorAll('.p-phone').forEach(el => {
     if (el.tagName === 'A') el.href = `tel:${phone}`;
-    el.innerText = phone;
+    if (el.children.length === 0) el.innerText = phone;
   });
 }
 
@@ -37,21 +38,36 @@ document.addEventListener('click', (e) => {
 });
 
 // --- PROJECT FETCHING ---
-async function fetchProjects() {
+let lastProjectData = null;
+
+async function fetchProjects(isAutoRefresh = false) {
   const container = document.getElementById('projects-container');
   if (!container) return;
+
+  // Only show loader on initial fetch
+  if (!isAutoRefresh && !lastProjectData) {
+    container.innerHTML = `<div class="project-placeholder reveal visible"><i class="fas fa-spinner fa-spin"></i><p>Syncing projects...</p></div>`;
+  }
 
   try {
     const response = await fetch(`${SCRIPT_URL}?key=${atob(_k)}`);
     const result = await response.json();
+    
     if (result.status === 'success') {
-      renderProjects(result.data);
-    } else {
+      const dataString = JSON.stringify(result.data);
+      if (dataString !== lastProjectData) {
+        lastProjectData = dataString;
+        renderProjects(result.data);
+        console.log('Projects synchronized with server.');
+      }
+    } else if (!isAutoRefresh) {
       container.innerHTML = `<p class="project-placeholder reveal" style="color: red;">Error: ${result.message}</p>`;
     }
   } catch (err) {
-    container.innerHTML = `<p class="project-placeholder reveal" style="color: red;">Failed to load projects. Please try again later.</p>`;
-    console.error('Error fetching projects:', err);
+    if (!isAutoRefresh) {
+      container.innerHTML = `<p class="project-placeholder reveal" style="color: red;">Failed to load projects. Please try again later.</p>`;
+      console.error('Error fetching projects:', err);
+    }
   }
 }
 
@@ -102,7 +118,7 @@ function renderProjects(projects) {
   container.innerHTML = '';
   
   if (!projects || projects.length === 0) {
-    container.innerHTML = `<div class="project-placeholder reveal"><i class="fas fa-folder-open"></i><p>No projects available right now.</p></div>`;
+    container.innerHTML = `<div class="project-placeholder reveal visible"><i class="fas fa-folder-open"></i><p>No projects available right now.</p></div>`;
     return;
   }
 
@@ -166,6 +182,18 @@ function openLightbox(src) {
 document.addEventListener('DOMContentLoaded', () => {
   injectProtectedInfo();
   fetchProjects();
+  
+  // Set up auto-sync every 30 seconds for multi-device consistency
+  setInterval(() => fetchProjects(true), 30000);
+
+  // Add sync indicator UI
+  const syncEl = document.createElement('div');
+  syncEl.id = 'sync-status';
+  syncEl.className = 'sync-status';
+  syncEl.innerHTML = '<div class="sync-dot sync-pulse"></div><span>Live Sync Active</span>';
+  document.body.appendChild(syncEl);
+  setTimeout(() => syncEl.classList.add('visible'), 2000);
+
   // Initialize other reveal elements
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
@@ -174,3 +202,4 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { threshold: 0.1 });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 });
+

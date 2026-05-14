@@ -36,6 +36,7 @@ body {
 nav {
   position: fixed; top: 0; width: 100%; z-index: 999;
   background: rgba(10,22,40,0.95);
+  -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(201,168,76,0.2);
   padding: 0 5%;
@@ -267,6 +268,14 @@ nav {
     break-inside: avoid;
   }
 }
+
+/* Fix for linting warnings */
+.cv-link-no-decor { color: inherit; text-decoration: none; }
+#cv-photo-placeholder { display: none; }
+.edu-link-wrap { color: inherit; text-decoration: none; }
+.cv-project-list-margin { margin-top: 5px; }
+.cv-footer-style { text-align: center; padding: 2rem; color: var(--grey); font-size: 0.8rem; }
+.cv-ref-text { color: #666; font-style: italic; }
 </style>
 </head>
 <body>
@@ -310,14 +319,14 @@ nav {
           <div><i class="fas fa-envelope"></i> <span class="p-email">Loading...</span></div>
           <div><i class="fas fa-phone"></i> <span class="p-phone">Loading...</span></div>
           <div><i class="fas fa-map-marker-alt"></i> Jitra, Kedah, Malaysia</div>
-          <div><i class="fab fa-linkedin"></i> <a href="https://www.linkedin.com/in/boon-shoung-77222b172/" target="_blank" style="color: inherit; text-decoration: none;">linkedin.com/in/boon-shoung-77222b172</a></div>
+          <div><i class="fab fa-linkedin"></i> <a href="https://www.linkedin.com/in/boon-shoung-77222b172/" target="_blank" rel="noopener noreferrer" class="cv-link-no-decor">linkedin.com/in/boon-shoung-77222b172</a></div>
           <div><i class="fas fa-globe"></i> boonshou.github.io</div>
         </div>
       </div>
       <div class="cv-header-right">
         <div class="cv-photo-wrap">
-          <img src="images/profile.jpg" alt="Profile Photo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-          <i class="fas fa-user-circle" style="display:none;"></i>
+          <img src="images/profile.jpg" alt="Profile Photo" onerror="this.style.display='none'; document.getElementById('cv-photo-placeholder').style.display='block';">
+          <i class="fas fa-user-circle" id="cv-photo-placeholder"></i>
         </div>
       </div>
     </header>
@@ -337,8 +346,8 @@ nav {
         <div class="edu-item">
           <div class="edu-head">
             <span class="edu-school">
-              <a href="https://www.utem.edu.my/" target="_blank" style="color: inherit; text-decoration: none;">Universiti Teknikal Malaysia Melaka (UTeM)</a>
-              <a href="https://www.google.com/maps/search/UTeM+Melaka" target="_blank" class="cv-map-link"><i class="fas fa-map-marker-alt"></i></a>
+              <a href="https://www.utem.edu.my/" target="_blank" rel="noopener noreferrer" class="edu-link-wrap">Universiti Teknikal Malaysia Melaka (UTeM)</a>
+              <a href="https://www.google.com/maps/search/UTeM+Melaka" target="_blank" rel="noopener noreferrer" class="cv-map-link" title="View UTeM on Google Maps"><i class="fas fa-map-marker-alt"></i></a>
             </span>
             <span class="edu-year">2024 — Present</span>
           </div>
@@ -347,8 +356,8 @@ nav {
         <div class="edu-item">
           <div class="edu-head">
             <span class="edu-school">
-              <a href="https://polimas.mypolycc.edu.my/" target="_blank" style="color: inherit; text-decoration: none;">Politeknik Sultan Abdul Halim Mu'adzam Shah (Polimas)</a>
-              <a href="https://maps.app.goo.gl/dX93ANAthgNk8bKGA" target="_blank" class="cv-map-link"><i class="fas fa-map-marker-alt"></i></a>
+              <a href="https://polimas.mypolycc.edu.my/" target="_blank" rel="noopener noreferrer" class="edu-link-wrap">Politeknik Sultan Abdul Halim Mu'adzam Shah (Polimas)</a>
+              <a href="https://maps.app.goo.gl/dX93ANAthgNk8bKGA" target="_blank" rel="noopener noreferrer" class="cv-map-link" title="View Polimas on Google Maps"><i class="fas fa-map-marker-alt"></i></a>
             </span>
             <span class="edu-year">Dec 2020 — Sep 2024</span>
           </div>
@@ -357,8 +366,8 @@ nav {
         <div class="edu-item">
           <div class="edu-head">
             <span class="edu-school">
-              <a href="https://www.facebook.com/kkbdkedah/" target="_blank" style="color: inherit; text-decoration: none;">Kolej Komuniti Bandar Darul Aman</a>
-              <a href="https://www.google.com/maps/search/Kolej+Komuniti+Bandar+Darul+Aman" target="_blank" class="cv-map-link"><i class="fas fa-map-marker-alt"></i></a>
+              <a href="https://www.facebook.com/kkbdkedah/" target="_blank" rel="noopener noreferrer" class="edu-link-wrap">Kolej Komuniti Bandar Darul Aman</a>
+              <a href="https://www.google.com/maps/search/Kolej+Komuniti+Bandar+Darul+Aman" target="_blank" rel="noopener noreferrer" class="cv-map-link" title="View Kolej Komuniti on Google Maps"><i class="fas fa-map-marker-alt"></i></a>
             </span>
             <span class="edu-year">Jan 2018 — Apr 2020</span>
           </div>
@@ -375,7 +384,7 @@ nav {
           <div class="edu-head">
             <span class="edu-school">
               Gano Excel Industries Sdn. Bhd. (IT Department)
-              <a href="https://maps.app.goo.gl/jxspGbyPYdAeP366A" target="_blank" class="cv-map-link"><i class="fas fa-map-marker-alt"></i></a>
+              <a href="https://maps.app.goo.gl/jxspGbyPYdAeP366A" target="_blank" rel="noopener noreferrer" class="cv-map-link" title="View Gano Excel on Google Maps"><i class="fas fa-map-marker-alt"></i></a>
             </span>
             <span class="edu-year">Aug 2023 — Jan 2024</span>
           </div>
@@ -391,7 +400,7 @@ nav {
           <div class="edu-head">
             <span class="edu-school">
               UIDM, Politeknik Sultan Abdul Halim Mu'adzam Shah (Polimas)
-              <a href="https://maps.app.goo.gl/dX93ANAthgNk8bKGA" target="_blank" class="cv-map-link"><i class="fas fa-map-marker-alt"></i></a>
+              <a href="https://maps.app.goo.gl/dX93ANAthgNk8bKGA" target="_blank" rel="noopener noreferrer" class="cv-map-link" title="View UIDM on Google Maps"><i class="fas fa-map-marker-alt"></i></a>
             </span>
             <span class="edu-year">2019 — 2020</span>
           </div>
@@ -406,12 +415,12 @@ nav {
           <div class="edu-head">
             <span class="edu-school">
               Pasaraya Wan Wan (Market)
-              <a href="https://www.google.com/maps/search/Pasaraya+Wan+Wan+Jitra" target="_blank" class="cv-map-link"><i class="fas fa-map-marker-alt"></i></a>
+              <a href="https://www.google.com/maps/search/Pasaraya+Wan+Wan+Jitra" target="_blank" rel="noopener noreferrer" class="cv-map-link" title="View Pasaraya Wan Wan on Google Maps"><i class="fas fa-map-marker-alt"></i></a>
             </span>
             <span class="edu-year">2020 — 2021</span>
           </div>
           <div class="edu-degree">Stockist (6 Months)</div>
-          <ul class="project-list" style="margin-top: 5px;">
+          <ul class="project-list cv-project-list-margin">
             <li>Managed a large volume of inventory in a high-speed, fast-paced retail environment.</li>
             <li>Handled systematic stock organization, receiving, and monitoring of goods.</li>
           </ul>
@@ -536,13 +545,13 @@ nav {
     <section class="cv-section">
       <h2 class="cv-section-title"><i class="fas fa-user-check"></i> References</h2>
       <div class="cv-content">
-        <p style="color: #666; font-style: italic;">Available upon request</p>
+        <p class="cv-ref-text">Available upon request</p>
       </div>
     </section>
   </div>
 </div>
 
-<footer style="text-align: center; padding: 2rem; color: var(--grey); font-size: 0.8rem;">
+<footer class="cv-footer-style">
   <p>© 2025 Boon Shoung A/L Kok Hoe. All Rights Reserved.</p>
 </footer>
 

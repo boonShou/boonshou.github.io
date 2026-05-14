@@ -552,8 +552,9 @@ section { min-height: 100vh; padding: 120px 8% 80px; }
   border: 1px solid rgba(201,168,76,0.1);
   border-radius: 10px; transition: all 0.3s;
   text-decoration: none;
+  color: var(--light);
 }
-.contact-item:hover { border-color: rgba(201,168,76,0.4); transform: translateX(6px); }
+.contact-item:hover { border-color: rgba(201,168,76,0.4); transform: translateX(6px); color: var(--gold); }
 .contact-item-icon {
   width: 44px; height: 44px; flex-shrink: 0;
   background: rgba(201,168,76,0.1);
@@ -748,4 +749,41 @@ footer span { color: var(--gold); }
   .project-gallery {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   }
+}
+
+/* ── SYNC INDICATOR ── */
+.sync-status {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(10, 22, 40, 0.8);
+  backdrop-filter: blur(8px);
+  padding: 8px 15px;
+  border-radius: 30px;
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  font-size: 0.75rem;
+  color: var(--grey);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+.sync-status.visible { opacity: 1; }
+.sync-dot {
+  width: 8px;
+  height: 8px;
+  background: #64ffda;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #64ffda;
+}
+.sync-dot.sync-pulse {
+  animation: pulse-green 2s infinite;
+}
+@keyframes pulse-green {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(100, 255, 218, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(100, 255, 218, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(100, 255, 218, 0); }
 }

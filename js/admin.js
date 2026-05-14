@@ -3,41 +3,56 @@ const _u = 'aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J5RENzbWR4eDJ3
 const _k = 'Qm9vblNob3VfUG9ydGZvbGlvX0FjY2Vzc18yMDI2';
 const SCRIPT_URL = atob(_u);
 
-let adminPassword = '';
+let adminPassword = localStorage.getItem('admin_pwd') || '';
 let currentProjects = [];
+let lastAdminSync = null;
 
 function login() {
   const pwd = document.getElementById('admin-password').value;
   if (!pwd) return;
   adminPassword = pwd;
+  localStorage.setItem('admin_pwd', pwd);
+  showDashboard();
+}
+
+function showDashboard() {
   document.getElementById('admin-login').style.display = 'none';
   document.getElementById('admin-dashboard').style.display = 'block';
   document.getElementById('logout-btn').style.display = 'block';
   loadAdminProjects();
+  // Set up polling for admin dashboard too
+  setInterval(() => loadAdminProjects(true), 20000);
 }
 
 function logout() {
   adminPassword = '';
+  localStorage.removeItem('admin_pwd');
   location.reload();
 }
 
-async function loadAdminProjects() {
+async function loadAdminProjects(isAutoSync = false) {
   const loader = document.getElementById('admin-loader');
   const table = document.getElementById('projects-table');
-  if (loader) loader.style.display = 'block';
-  if (table) table.style.display = 'none';
+  
+  if (!isAutoSync && loader) loader.style.display = 'block';
+  if (!isAutoSync && table) table.style.display = 'none';
 
   try {
     const response = await fetch(`${SCRIPT_URL}?key=${atob(_k)}`);
     const result = await response.json();
     if (result.status === 'success') {
-      currentProjects = result.data;
-      renderAdminTable();
-    } else {
+      const dataString = JSON.stringify(result.data);
+      if (dataString !== lastAdminSync) {
+        lastAdminSync = dataString;
+        currentProjects = result.data;
+        renderAdminTable();
+        console.log('Admin data synchronized.');
+      }
+    } else if (!isAutoSync) {
       alert("Error: " + result.message);
     }
   } catch (err) {
-    alert("Failed to fetch projects. Check your SCRIPT_URL and deployment.");
+    if (!isAutoSync) alert("Failed to fetch projects. Check your connection.");
   } finally {
     if (loader) loader.style.display = 'none';
     if (table) table.style.display = 'table';
@@ -52,11 +67,13 @@ function renderAdminTable() {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${proj.id}</td>
-      <td>${proj.title}</td>
-      <td>${proj.tags}</td>
+      <td><strong>${proj.title}</strong></td>
+      <td>${proj.tags.split(',').map(t => `<span class="project-tag" style="font-size:0.6rem; margin:2px;">${t.trim()}</span>`).join('')}</td>
       <td>
-        <button class="action-btn edit" onclick="editProject('${proj.id}')"><i class="fas fa-edit"></i></button>
-        <button class="action-btn delete" onclick="deleteProject('${proj.id}')"><i class="fas fa-trash"></i></button>
+        <div style="display:flex; gap:5px;">
+          <button class="action-btn edit" onclick="editProject('${proj.id}')"><i class="fas fa-edit"></i></button>
+          <button class="action-btn delete" onclick="deleteProject('${proj.id}')"><i class="fas fa-trash"></i></button>
+        </div>
       </td>
     `;
     tbody.appendChild(tr);
@@ -219,3 +236,11 @@ function toggleNav() {
   const navLinks = document.getElementById('navLinks');
   if (navLinks) navLinks.classList.toggle('open');
 }
+
+// Auto-login if password exists
+document.addEventListener('DOMContentLoaded', () => {
+  if (adminPassword) {
+    showDashboard();
+  }
+});
+

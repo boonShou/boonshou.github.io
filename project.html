@@ -7,6 +7,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    #project-loader { text-align: center; margin: 100px auto; }
+    #project-loader i { font-size: 3rem; color: var(--gold); }
+    #project-loader p { margin-top: 20px; color: var(--gold); }
+    #project-detail-container { display: none; }
+  </style>
 </head>
 <body>
 
@@ -18,12 +24,12 @@
   </nav>
 
   <section class="project-detail">
-    <div id="project-loader" style="text-align: center; margin: 100px auto;">
-      <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: var(--gold);"></i>
-      <p style="margin-top: 20px; color: var(--gold);">Loading Project Details...</p>
+    <div id="project-loader">
+      <i class="fas fa-spinner fa-spin"></i>
+      <p>Loading Project Details...</p>
     </div>
 
-    <div id="project-detail-container" style="display: none;">
+    <div id="project-detail-container">
       <!-- Content will be injected here -->
     </div>
   </section>
@@ -34,7 +40,9 @@
 
   <script src="js/script.js"></script>
   <script>
-    async function loadProjectDetails() {
+    let lastDetailData = null;
+
+    async function loadProjectDetails(isAutoSync = false) {
       const urlParams = new URLSearchParams(window.location.search);
       const projectId = urlParams.get('id');
       const container = document.getElementById('project-detail-container');
@@ -51,6 +59,10 @@
 
         if (result.status === 'success' && result.data.length > 0) {
           const proj = result.data[0];
+          const dataString = JSON.stringify(proj);
+          
+          if (dataString === lastDetailData) return; // No change
+          lastDetailData = dataString;
           
           // Render Tags as Badges
           const tagsHtml = (proj.tags || '').split(',').map(t => `<span class="project-tag">${t.trim()}</span>`).join(' ');
@@ -59,7 +71,7 @@
           let galleryHtml = '';
           if (proj.image_url) {
             galleryHtml += `
-              <div class="gallery-item reveal" onclick="openLightbox('${proj.image_url}')">
+              <div class="gallery-item reveal visible" onclick="openLightbox('${proj.image_url}')">
                 <img src="${proj.image_url}" alt="Main Image">
               </div>
             `;
@@ -67,7 +79,7 @@
           if (proj.additional_images) {
             proj.additional_images.split('|').forEach(path => {
               galleryHtml += `
-                <div class="gallery-item reveal" onclick="openLightbox('${path}')">
+                <div class="gallery-item reveal visible" onclick="openLightbox('${path}')">
                   <img src="${path}" alt="Gallery Image">
                 </div>
               `;
@@ -75,7 +87,7 @@
           }
 
           container.innerHTML = `
-            <div class="project-header reveal">
+            <div class="project-header reveal visible">
               <h1>${proj.title}</h1>
               <div class="project-meta">
                 <div class="meta-item">
@@ -96,32 +108,32 @@
               ${galleryHtml}
             </div>
 
-            <div class="project-content reveal">
+            <div class="project-content reveal visible">
               <p>${(proj.detailed_description || proj.short_description || '').replace(/\n/g, '<br>')}</p>
             </div>
           `;
           
           loader.style.display = 'none';
           container.style.display = 'block';
-
-          // Trigger reveal animations
-          setTimeout(() => {
-            document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
-          }, 100);
-        } else {
+        } else if (!isAutoSync) {
           container.innerHTML = '<p style="text-align:center; color:red;">Project not found.</p>';
           loader.style.display = 'none';
           container.style.display = 'block';
         }
       } catch (error) {
-        console.error('Error:', error);
-        container.innerHTML = '<p style="text-align:center; color:red;">Error loading project details.</p>';
-        loader.style.display = 'none';
-        container.style.display = 'block';
+        if (!isAutoSync) {
+          console.error('Error:', error);
+          container.innerHTML = '<p style="text-align:center; color:red;">Error loading project details.</p>';
+          loader.style.display = 'none';
+          container.style.display = 'block';
+        }
       }
     }
 
-    document.addEventListener('DOMContentLoaded', loadProjectDetails);
+    document.addEventListener('DOMContentLoaded', () => {
+      loadProjectDetails();
+      setInterval(() => loadProjectDetails(true), 20000);
+    });
   </script>
 </body>
 </html>
