@@ -12,6 +12,7 @@
     #project-loader i { font-size: 3rem; color: var(--gold); }
     #project-loader p { margin-top: 20px; color: var(--gold); }
     #project-detail-container { display: none; }
+    .error-msg { text-align: center; color: #ff4d4d; margin-top: 50px; font-weight: 500; }
   </style>
 </head>
 <body>
@@ -54,7 +55,7 @@
       }
 
       try {
-        const response = await fetch(`${SCRIPT_URL}?id=${projectId}`);
+        const response = await fetch(`${SCRIPT_URL}?key=${atob(_k)}&id=${projectId}`);
         const result = await response.json();
 
         if (result.status === 'success' && result.data.length > 0) {
@@ -116,14 +117,14 @@
           loader.style.display = 'none';
           container.style.display = 'block';
         } else if (!isAutoSync) {
-          container.innerHTML = '<p style="text-align:center; color:red;">Project not found.</p>';
+          container.innerHTML = '<p class="error-msg">Project not found.</p>';
           loader.style.display = 'none';
           container.style.display = 'block';
         }
       } catch (error) {
         if (!isAutoSync) {
           console.error('Error:', error);
-          container.innerHTML = '<p style="text-align:center; color:red;">Error loading project details.</p>';
+          container.innerHTML = '<p class="error-msg">Error loading project details. Please try again later.</p>';
           loader.style.display = 'none';
           container.style.display = 'block';
         }
