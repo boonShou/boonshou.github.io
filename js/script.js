@@ -194,12 +194,57 @@ document.addEventListener('DOMContentLoaded', () => {
   document.body.appendChild(syncEl);
   setTimeout(() => syncEl.classList.add('visible'), 2000);
 
-  // Initialize other reveal elements
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) entry.target.classList.add('visible');
-    });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-});
+  // --- NEW ANIMATIONS ---
 
+  // 1. Cursor Glow
+  const glow = document.createElement('div');
+  glow.className = 'cursor-glow';
+  document.body.appendChild(glow);
+
+  window.addEventListener('mousemove', (e) => {
+    glow.style.left = e.clientX + 'px';
+    glow.style.top = e.clientY + 'px';
+  });
+
+  // 2. Magnetic Buttons
+  const magneticElements = document.querySelectorAll('.btn-primary, .btn-outline, .social-btn, .contact-item, .media-icon-btn');
+  
+  magneticElements.forEach(el => {
+    el.addEventListener('mousemove', function(e) {
+      const rect = el.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      
+      el.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+      glow.style.width = '600px';
+      glow.style.height = '600px';
+    });
+
+    el.addEventListener('mouseleave', function() {
+      el.style.transform = 'translate(0, 0)';
+      glow.style.width = '400px';
+      glow.style.height = '400px';
+    });
+  });
+
+  // 3. Enhanced Reveal (Staggered)
+  const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+  
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        
+        // Handle staggered children if the class is present
+        if (entry.target.classList.contains('stagger-reveal')) {
+          const children = entry.target.children;
+          Array.from(children).forEach((child, index) => {
+            child.style.transitionDelay = `${index * 0.1}s`;
+          });
+        }
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll('.reveal, .stagger-reveal').forEach(el => revealObserver.observe(el));
+});

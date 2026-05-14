@@ -245,13 +245,29 @@ nav {
 .lang-item strong { color: var(--navy); }
 
 @media (max-width: 900px) {
-  .nav-links { display: none; }
+  .nav-links { 
+    display: none; 
+    flex-direction: column; 
+    position: absolute; 
+    top: 70px; 
+    left: 0; 
+    width: 100%; 
+    background: rgba(10,22,40,0.98); 
+    padding: 2rem 5%; 
+    gap: 1.5rem; 
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+  }
+  .nav-links.open { display: flex; }
   .hamburger { display: flex; }
-  #cv-document { padding: 25px; }
+  .cv-page-wrapper { padding: 90px 4% 40px; }
+  #cv-document { padding: 20px; box-shadow: none; }
   .cv-header { flex-direction: column-reverse; gap: 20px; align-items: center; text-align: center; }
-  .contact-info { grid-template-columns: 1fr; text-align: left; }
-  .cv-photo-wrap { margin-bottom: 10px; }
+  .contact-info { grid-template-columns: 1fr; text-align: left; font-size: 0.8rem; }
+  .cv-photo-wrap { margin-bottom: 10px; width: 100px; height: 125px; }
   .skills-grid { grid-template-columns: 1fr; }
+  .cv-header-left h1 { font-size: 1.6rem; }
 }
 
 /* Print specific styles to ensure PDF looks perfect */
@@ -315,7 +331,7 @@ nav {
       <div class="cv-header-left">
         <h1>Boon Shoung A/L Kok Hoe</h1>
         <p class="degree">Bachelor of Computer Science (Artificial Intelligence)</p>
-        <div class="contact-info">
+        <div class="contact-info stagger-reveal">
           <div><i class="fas fa-envelope"></i> <span class="p-email">Loading...</span></div>
           <div><i class="fas fa-phone"></i> <span class="p-phone">Loading...</span></div>
           <div><i class="fas fa-map-marker-alt"></i> Jitra, Kedah, Malaysia</div>
@@ -334,7 +350,7 @@ nav {
     <!-- Objective -->
     <section class="cv-section objective">
       <h2 class="cv-section-title"><i class="fas fa-bullseye"></i> Internship Objective</h2>
-      <div class="cv-content">
+      <div class="cv-content stagger-reveal">
         <p>A highly motivated Computer Science student specializing in Artificial Intelligence, seeking an internship opportunity to apply my technical skills in software development, web applications, and AI. Dedicated to building intelligent solutions and meaningful digital experiences while contributing to innovative projects and learning from industry professionals.</p>
       </div>
     </section>
@@ -342,7 +358,7 @@ nav {
     <!-- Education -->
     <section class="cv-section">
       <h2 class="cv-section-title"><i class="fas fa-graduation-cap"></i> Education</h2>
-      <div class="cv-content">
+      <div class="cv-content stagger-reveal">
         <div class="edu-item">
           <div class="edu-head">
             <span class="edu-school">
@@ -379,7 +395,7 @@ nav {
     <!-- Experience -->
     <section class="cv-section">
       <h2 class="cv-section-title"><i class="fas fa-briefcase"></i> Work Experience</h2>
-      <div class="cv-content">
+      <div class="cv-content stagger-reveal">
         <div class="edu-item">
           <div class="edu-head">
             <span class="edu-school">
@@ -389,7 +405,7 @@ nav {
             <span class="edu-year">Aug 2023 — Jan 2024</span>
           </div>
           <div class="edu-degree">Web Developer Internship</div>
-          <ul class="project-list" style="margin-top: 5px;">
+          <ul class="project-list cv-project-list">
             <li>Developed "PC TRACKING", a web-based system using ASP.NET and VB to manage hardware and software licensing assets.</li>
             <li>Built core modules for record validation (Maintenance & Admin), domain renewal tracking, and job activity logging.</li>
             <li>Implemented advanced RDLC reporting for asset distribution and domain status monitoring.</li>
@@ -405,7 +421,7 @@ nav {
             <span class="edu-year">2019 — 2020</span>
           </div>
           <div class="edu-degree">Practical Student / Industrial Training (16 Weeks)</div>
-          <ul class="project-list" style="margin-top: 5px;">
+          <ul class="project-list cv-project-list">
             <li>Video editing for multimedia content creation.</li>
             <li>Camera operator for official events and professional recordings.</li>
             <li>Setup and management of speaker and audio equipment in institutional halls.</li>
@@ -458,7 +474,7 @@ nav {
     <!-- Projects -->
     <section class="cv-section">
       <h2 class="cv-section-title"><i class="fas fa-project-diagram"></i> Key Projects</h2>
-      <div class="cv-content">
+      <div class="cv-content stagger-reveal">
         <!-- Project 1: Internship Project -->
         <div class="project-item">
           <div class="project-head">"PC TRACKING" Computer Monitoring System</div>
@@ -518,7 +534,7 @@ nav {
     <!-- Personal Qualities -->
     <section class="cv-section">
       <h2 class="cv-section-title"><i class="fas fa-star"></i> Personal Qualities</h2>
-      <div class="cv-content">
+      <div class="cv-content stagger-reveal">
         <ul class="qualities-list">
           <li>Creative Thinker</li>
           <li>Team Player</li>
